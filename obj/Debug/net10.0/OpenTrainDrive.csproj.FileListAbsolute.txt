@@ -95,3 +95,4 @@ C:\Users\saemi\Documents\OpenTrainDrive\obj\Debug\net10.0\refint\OpenTrainDrive.
 C:\Users\saemi\Documents\OpenTrainDrive\obj\Debug\net10.0\OpenTrainDrive.pdb
 C:\Users\saemi\Documents\OpenTrainDrive\obj\Debug\net10.0\OpenTrainDrive.genruntimeconfig.cache
 C:\Users\saemi\Documents\OpenTrainDrive\obj\Debug\net10.0\ref\OpenTrainDrive.dll
+C:\Users\saemi\Documents\OpenTrainDrive\obj\Debug\net10.0\OpenTrainDrive.sourcelink.json
