@@ -3,18 +3,30 @@
 }
 <div class="text-center">
     <h1 class="display-4">Willkommen bei OpenTrainDrive</h1>
-    <p class="lead">Diese Seite zeigt eine einfache Startseite — hier kannst du die Anwendung testen.</p>
+    <p class="lead">Opensource Modellbahnsteuerung</p>
 
-    <p>Serverzeit: <strong>@DateTime.Now.ToString("G")</strong></p>
+    <p>Serverzeit: <span id="uhr"></span></p>
 
     <p>
         <a class="btn btn-primary" href="/Home/Privacy">Zur Privacy-Seite</a>
-        <button id="openWindowBtn" class="btn btn-secondary">Neues Fenster öffnen</button>
+        <button id="openWindowBtn" class="btn btn-secondary">Neues Projekt anlegen</button>
     </p>
 </div>
+
+
 
 <script>
     document.getElementById('openWindowBtn').addEventListener('click', function () {
         window.open('/Home/Privacy', '_blank', 'noopener');
     });
+
+    function updateUhr() {
+  const datum = new Date(); // Erstellt ein neues Date-Objekt
+  const stunden = datum.getHours().toString().padStart(2, '0'); // Stunden mit führender Null
+  const minuten = datum.getMinutes().toString().padStart(2, '0'); // Minuten mit führender Null
+  const sekunden = datum.getSeconds().toString().padStart(2, '0'); // Sekunden mit führender Null
+
+  document.getElementById('uhr').innerHTML = `${stunden}:${minuten}:${sekunden}`; // Zeigt die Uhrzeit an
+}
+setInterval(updateUhr, 1000);
 </script>

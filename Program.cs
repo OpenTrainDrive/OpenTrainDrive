@@ -68,7 +68,7 @@ app.Lifetime.ApplicationStarted.Register(() =>
     {
         var server = app.Services.GetRequiredService<IServer>();
         var addressesFeature = server.Features.Get<IServerAddressesFeature>();
-        var url = addressesFeature?.Addresses?.FirstOrDefault() ?? "http://localhost:5000";
+        var url = addressesFeature?.Addresses?.FirstOrDefault() ?? "http://localhost:65001";
         try
         {
             Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });

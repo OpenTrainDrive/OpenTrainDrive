@@ -1,0 +1,15 @@
+--- App start 2026-01-05T15:08:41.7458253+01:00 ---
+[40m[1m[33mwarn[39m[22m[49m: Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware[16]
+      The WebRootPath was not found: C:\Users\saemi\Documents\OpenTrainDrive\bin\Debug\net10.0\wwwroot. Static files may be unavailable.
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5000
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\saemi\Documents\OpenTrainDrive\bin\Debug\net10.0
+[40m[1m[33mwarn[39m[22m[49m: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
