@@ -21,6 +21,14 @@ body {
   margin-bottom: 60px;
 }
 
+body.full-bleed {
+  margin-bottom: 0;
+}
+
+body.full-bleed main {
+  padding-bottom: 0 !important;
+}
+
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;
@@ -29,3 +37,209 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.otd-shell {
+  min-height: 100vh;
+  background: #5a657d;
+  color: #e7ecf5;
+  font-family: "Trebuchet MS", "Lucida Grande", "Verdana", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.otd-topbar {
+  background: #1f2b45;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 10px;
+  border-bottom: 1px solid #101826;
+}
+
+.otd-brand-badge {
+  background: #f0e34a;
+  color: #1f2b45;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 12px;
+}
+
+.otd-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.otd-nav-item {
+  position: relative;
+}
+
+.otd-nav-trigger {
+  background: transparent;
+  border: 0;
+  color: #e4ebf7;
+  font: inherit;
+  padding: 0;
+  cursor: pointer;
+}
+
+.otd-nav-trigger:hover,
+.otd-nav-trigger:focus {
+  color: #f6f7fb;
+  outline: none;
+}
+
+.otd-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 170px;
+  background: #2a3859;
+  border: 1px solid #101826;
+  border-radius: 3px;
+  padding: 6px 0;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  display: none;
+  z-index: 10;
+}
+
+.otd-dropdown a {
+  display: block;
+  padding: 6px 12px;
+  color: #e4ebf7;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.otd-dropdown a:hover,
+.otd-dropdown a:focus {
+  background: #36466d;
+  color: #ffffff;
+  outline: none;
+}
+
+.otd-dropdown-form {
+  margin: 0;
+}
+
+.otd-dropdown-button {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  padding: 6px 12px;
+  color: #e4ebf7;
+  font: inherit;
+  cursor: pointer;
+}
+
+.otd-dropdown-button:hover,
+.otd-dropdown-button:focus {
+  background: #36466d;
+  color: #ffffff;
+  outline: none;
+}
+
+.otd-nav-item:hover .otd-dropdown,
+.otd-nav-item:focus-within .otd-dropdown {
+  display: block;
+}
+
+.otd-status {
+  margin-left: auto;
+  font-size: 12px;
+  color: #f3d25c;
+}
+
+.otd-workspace {
+  flex: 1;
+  position: relative;
+  background: linear-gradient(180deg, #5a657d 0%, #566177 100%);
+}
+
+.otd-hidden {
+  display: none;
+}
+
+.otd-melde-panel {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  height: 320px;
+  background: #40485a;
+  color: #e7ecf5;
+  font-family: "Trebuchet MS", "Lucida Grande", "Verdana", sans-serif;
+  padding: 10px;
+  border: 1px solid #1b2438;
+}
+
+.otd-melde-shell {
+  min-height: 100vh;
+  background: #40485a;
+  color: #e7ecf5;
+  font-family: "Trebuchet MS", "Lucida Grande", "Verdana", sans-serif;
+  padding: 10px;
+}
+
+.otd-melde-titlebar {
+  background: #1f2b45;
+  border: 1px solid #101826;
+  border-bottom: 0;
+  padding: 6px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.otd-melde-close,
+.otd-melde-close-button {
+  background: #2a3859;
+  border: 1px solid #101826;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: #e7ecf5;
+  cursor: pointer;
+}
+
+.otd-melde-close-button:hover,
+.otd-melde-close-button:focus {
+  background: #36466d;
+  outline: none;
+}
+
+.otd-melde-columns {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  border: 1px solid #101826;
+  background: #1f2b45;
+  padding: 8px;
+}
+
+.otd-melde-column {
+  border: 1px solid #293659;
+  background: #223050;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.otd-melde-header {
+  padding: 6px 8px;
+  border-bottom: 1px solid #293659;
+  font-size: 13px;
+  background: #1c2742;
+}
+
+.otd-melde-body {
+  flex: 1;
+}
+
+

@@ -1,32 +1,162 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Start";
+    ViewData["FullBleed"] = true;
 }
-<div class="text-center">
-    <h1 class="display-4">Willkommen bei OpenTrainDrive</h1>
-    <p class="lead">Opensource Modellbahnsteuerung</p>
-
-    <p>Serverzeit: <span id="uhr"></span></p>
-
-    <p>
-        <a class="btn btn-primary" href="/Home/Privacy">Zur Privacy-Seite</a>
-        <button id="openWindowBtn" class="btn btn-secondary">Neues Projekt anlegen</button>
-    </p>
+<div class="otd-shell">
+    <header class="otd-topbar">
+        <div class="otd-brand">
+            <span class="otd-brand-badge">OpenTrainDrive</span>
+        </div>
+        <nav class="otd-nav" aria-label="Hauptnavigation">
+            <div class="otd-nav-item">
+                <button class="otd-nav-trigger" type="button" aria-haspopup="true">System</button>
+                <div class="otd-dropdown" role="menu">
+                    <a role="menuitem" href="#">Status</a>
+                    <a role="menuitem" href="#">Verbindungen</a>
+                    <a role="menuitem" href="#">Logs</a>
+                    <button class="otd-dropdown-button" type="button" onclick="openMeldeverwalter();">Meldeverwalter</button>
+                    <form asp-controller="Home" asp-action="Stop" method="post" class="otd-dropdown-form">
+                        @Html.AntiForgeryToken()
+                        <button class="otd-dropdown-button" type="submit" onclick="return confirm('Moechten Sie die Anwendung und den Server wirklich beenden?');">Beenden</button>
+                    </form>
+                </div>
+            </div>
+            <div class="otd-nav-item">
+                <button class="otd-nav-trigger" type="button" aria-haspopup="true">ZN/ZL</button>
+                <div class="otd-dropdown" role="menu">
+                    <a role="menuitem" href="#">Zugnummern</a>
+                    <a role="menuitem" href="#">Zuglenkung</a>
+                    <a role="menuitem" href="#">Prioritaeten</a>
+                </div>
+            </div>
+            <div class="otd-nav-item">
+                <button class="otd-nav-trigger" type="button" aria-haspopup="true">Zugdaten</button>
+                <div class="otd-dropdown" role="menu">
+                    <a role="menuitem" href="#">Lokomotiven</a>
+                    <a role="menuitem" href="#">Wagen</a>
+                    <a role="menuitem" href="#">Zuege</a>
+                </div>
+            </div>
+            <div class="otd-nav-item">
+                <button class="otd-nav-trigger" type="button" aria-haspopup="true">Gleismelder</button>
+                <div class="otd-dropdown" role="menu">
+                    <a role="menuitem" href="#">Uebersicht</a>
+                    <a role="menuitem" href="#">Stoerungen</a>
+                    <a role="menuitem" href="#">Test</a>
+                </div>
+            </div>
+            <div class="otd-nav-item">
+                <button class="otd-nav-trigger" type="button" aria-haspopup="true">Uebersichtsbilder</button>
+                <div class="otd-dropdown" role="menu">
+                    <a role="menuitem" href="#">Bahnhof</a>
+                    <a role="menuitem" href="#">Strecke</a>
+                    <a role="menuitem" href="#">Knoten</a>
+                </div>
+            </div>
+            <div class="otd-nav-item">
+                <button class="otd-nav-trigger" type="button" aria-haspopup="true">Lupenbilder</button>
+                <div class="otd-dropdown" role="menu">
+                    <a role="menuitem" href="#">Kamerapositionen</a>
+                    <a role="menuitem" href="#">Zoom</a>
+                    <a role="menuitem" href="#">Archiv</a>
+                </div>
+            </div>
+            <div class="otd-nav-item">
+                <button class="otd-nav-trigger" type="button" aria-haspopup="true">RBC</button>
+                <div class="otd-dropdown" role="menu">
+                    <a role="menuitem" href="#">Status</a>
+                    <a role="menuitem" href="#">Telegramme</a>
+                    <a role="menuitem" href="#">Verbindungsinfo</a>
+                </div>
+            </div>
+            <div class="otd-nav-item">
+                <button class="otd-nav-trigger" type="button" aria-haspopup="true">Konfiguration</button>
+                <div class="otd-dropdown" role="menu">
+                    <a role="menuitem" href="#">Projekte</a>
+                    <a role="menuitem" href="#">Benutzer</a>
+                    <a role="menuitem" href="#">Einstellungen</a>
+                </div>
+            </div>
+            <div class="otd-nav-item">
+                <button class="otd-nav-trigger" type="button" aria-haspopup="true">?</button>
+                <div class="otd-dropdown" role="menu">
+                    <a role="menuitem" href="#">Hilfe</a>
+                    <a role="menuitem" href="#">Info</a>
+                    <a role="menuitem" href="#">Support</a>
+                </div>
+            </div>
+        </nav>
+        <div class="otd-status">
+            <span class="otd-status-time" id="otd-zeit"></span>
+        </div>
+    </header>
+    <section class="otd-workspace" aria-label="Arbeitsbereich">
+        <div class="otd-melde-panel otd-hidden" id="otd-melde-panel" aria-label="Meldeverwalter">
+            <div class="otd-melde-titlebar">
+                <span class="otd-melde-title">Praettigau</span>
+                <button class="otd-melde-close-button" type="button" onclick="closeMeldeverwalter();">X</button>
+            </div>
+            <div class="otd-melde-columns">
+                <div class="otd-melde-column">
+                    <div class="otd-melde-header">Bedienaufforderungen</div>
+                    <div class="otd-melde-body"></div>
+                </div>
+                <div class="otd-melde-column">
+                    <div class="otd-melde-header">Betriebsmeldungen</div>
+                    <div class="otd-melde-body"></div>
+                </div>
+                <div class="otd-melde-column">
+                    <div class="otd-melde-header">Stoerungen</div>
+                    <div class="otd-melde-body"></div>
+                </div>
+                <div class="otd-melde-column">
+                    <div class="otd-melde-header">System</div>
+                    <div class="otd-melde-body"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
-
-
 <script>
-    document.getElementById('openWindowBtn').addEventListener('click', function () {
-        window.open('/Home/Privacy', '_blank', 'noopener');
-    });
+    function requestFullscreenOnFirstInteraction() {
+        const root = document.documentElement;
+        if (!root.requestFullscreen) {
+            return;
+        }
+        const handler = () => {
+            root.requestFullscreen().catch(() => { });
+            window.removeEventListener('click', handler);
+            window.removeEventListener('keydown', handler);
+        };
+        window.addEventListener('click', handler, { once: true });
+        window.addEventListener('keydown', handler, { once: true });
+    }
 
-    function updateUhr() {
-  const datum = new Date(); // Erstellt ein neues Date-Objekt
-  const stunden = datum.getHours().toString().padStart(2, '0'); // Stunden mit führender Null
-  const minuten = datum.getMinutes().toString().padStart(2, '0'); // Minuten mit führender Null
-  const sekunden = datum.getSeconds().toString().padStart(2, '0'); // Sekunden mit führender Null
+    function updateZeit() {
+        const datum = new Date();
+        const tag = datum.getDate().toString().padStart(2, '0');
+        const monat = (datum.getMonth() + 1).toString().padStart(2, '0');
+        const jahr = datum.getFullYear().toString();
+        const stunden = datum.getHours().toString().padStart(2, '0');
+        const minuten = datum.getMinutes().toString().padStart(2, '0');
+        const sekunden = datum.getSeconds().toString().padStart(2, '0');
 
-  document.getElementById('uhr').innerHTML = `${stunden}:${minuten}:${sekunden}`; // Zeigt die Uhrzeit an
-}
-setInterval(updateUhr, 1000);
+        const text = `${tag}.${monat}.${jahr} ${stunden}:${minuten}:${sekunden}`;
+        document.getElementById('otd-zeit').textContent = text;
+    }
+
+    requestFullscreenOnFirstInteraction();
+    updateZeit();
+    setInterval(updateZeit, 1000);
+
+    function openMeldeverwalter() {
+        const panel = document.getElementById('otd-melde-panel');
+        panel.classList.remove('otd-hidden');
+    }
+
+    function closeMeldeverwalter() {
+        const panel = document.getElementById('otd-melde-panel');
+        panel.classList.add('otd-hidden');
+    }
 </script>
