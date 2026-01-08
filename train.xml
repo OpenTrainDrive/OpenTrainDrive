@@ -41,4 +41,17 @@
       </car>
     </cars>
   </train>
+  <train id="13075ccf-731f-43a2-b951-3c4cfc428819">
+    <name>Kurzgüterzug</name>
+    <length>32</length>
+    <vmax>80</vmax>
+    <cars>
+      <car id="9f12036d-b737-4407-83fd-238fae8491ee" type="loco" length="20" vmax="200">
+        <name>Re475</name>
+      </car>
+      <car id="8a520c00-1526-4d6a-a64d-ebab2f831a36" type="waggon" length="12" vmax="80">
+        <name>Kesselwage</name>
+      </car>
+    </cars>
+  </train>
 </trains>
