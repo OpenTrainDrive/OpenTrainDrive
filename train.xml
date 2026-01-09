@@ -41,6 +41,7 @@
       </car>
     </cars>
   </train>
+<<<<<<< HEAD
   <train id="8e767134-aea6-45e7-84c4-4778fe475682">
     <name>Selina</name>
     <length>400</length>
@@ -51,6 +52,18 @@
       </car>
       <car id="4866680d-1046-4123-867b-1613c9e47f3a" type="waggon" length="100" vmax="">
         <name>Selina</name>
+=======
+  <train id="13075ccf-731f-43a2-b951-3c4cfc428819">
+    <name>Kurzgüterzug</name>
+    <length>32</length>
+    <vmax>80</vmax>
+    <cars>
+      <car id="9f12036d-b737-4407-83fd-238fae8491ee" type="loco" length="20" vmax="200">
+        <name>Re475</name>
+      </car>
+      <car id="8a520c00-1526-4d6a-a64d-ebab2f831a36" type="waggon" length="12" vmax="80">
+        <name>Kesselwage</name>
+>>>>>>> 94669d19dbc4e8ae036456ec1841780e66e5717d
       </car>
     </cars>
   </train>
