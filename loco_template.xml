@@ -1,21 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <locos>
-  <loco id="695238b8-3b17-4a27-86e9-18f650ac808d">
-    <name>re460</name>
-    <protocol>DCC</protocol>
-    <address>3</address>
-    <speeds>128</speeds>
+  <loco id="Re460" name="Re 460" index="1">
+    <description>SBB Re 460 023 (rot)</description>
     <length>20</length>
     <weight>80</weight>
+    <tractiontype>electric</tractiontype>
     <vmax>200</vmax>
+    <image>locoimages/re460_023_rot.png</image>
     <notes>meine Bemerkungen</notes>
-  </loco>
-  <loco id="adc45874-fbf5-4b71-9b02-92c30955f6e2">
-    <name>test</name>
-    <address></address>
-    <length>20</length>
-    <vmax>200</vmax>
-    <vmin></vmin>
-    <notes></notes>
+    <decoder>
+      <protocol>DCC</protocol>
+      <address>3</address>
+      <addresstype>long</addresstype>
+      <speedsteps>128</speedsteps>
+      <functiontable>
+        <function index="0" name="Licht" type="light" />
+        <function index="1" name="Funktion 1" type="momentary" />
+        <function index="2" name="Funktion 2" type="toggle" />
+      </functiontable>
+      <speedtable>
+        <speed step="1" v="1" />
+        <speed step="2" v="8" />
+        <speed step="3" v="16" />
+        <speed step="4" v="24" />
+        <speed step="5" v="32" />
+        <speed step="6" v="40" />
+        <speed step="7" v="48" />
+        <speed step="8" v="56" />
+        <speed step="9" v="64" />
+        <speed step="10" v="72" />
+        <speed step="11" v="80" />
+        <speed step="12" v="88" />
+        <speed step="13" v="90" />
+        <speed step="14" v="97" />
+        <speed step="15" v="105" />
+        <speed step="16" v="112" />
+        <speed step="17" v="120" />
+        <speed step="18" v="127" />
+        <speed step="19" v="135" />
+        <speed step="20" v="142" />
+        <speed step="21" v="150" />
+        <speed step="22" v="157" />
+        <speed step="23" v="165" />
+        <speed step="24" v="172" />
+        <speed step="25" v="180" />
+        <speed step="26" v="187" />
+        <speed step="27" v="200" />
+      </speedtable>
+    </decoder>
+    <operation>
+      <purchasedate>2022-05-01</purchasedate>
+      <operatinghours>20</operatinghours>
+      <serviceinterval>40</serviceinterval>
+      <lastservice>2024-06-01</lastservice>
+    </operation>
   </loco>
 </locos>
