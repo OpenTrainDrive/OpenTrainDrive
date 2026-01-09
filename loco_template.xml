@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<locomotives>
-  <locomotive id="695238b8-3b17-4a27-86e9-18f650ac808d">
+<locos>
+  <loco id="695238b8-3b17-4a27-86e9-18f650ac808d">
     <name>re460</name>
     <protocol>DCC</protocol>
     <address>3</address>
@@ -9,13 +9,13 @@
     <weight>80</weight>
     <vmax>200</vmax>
     <notes>meine Bemerkungen</notes>
-  </locomotive>
-  <locomotive id="adc45874-fbf5-4b71-9b02-92c30955f6e2">
+  </loco>
+  <loco id="adc45874-fbf5-4b71-9b02-92c30955f6e2">
     <name>test</name>
     <address></address>
     <length>20</length>
     <vmax>200</vmax>
     <vmin></vmin>
     <notes></notes>
-  </locomotive>
-</locomotives>
+  </loco>
+</locos>

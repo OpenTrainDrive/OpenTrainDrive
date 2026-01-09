@@ -153,7 +153,7 @@
                 const xml = await resp.text();
                 const doc = new DOMParser().parseFromString(xml, 'application/xml');
                 const list = [];
-                doc.querySelectorAll('locomotives > locomotive').forEach(node => {
+                doc.querySelectorAll('locos > loco').forEach(node => {
                     list.push({
                         id: node.getAttribute('id') || crypto.randomUUID(),
                         name: node.querySelector('name')?.textContent ?? '',

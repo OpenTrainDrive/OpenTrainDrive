@@ -421,8 +421,8 @@ app.MapPost("/loco/save", async (List<LokoDto> locos) =>
 {
     var path = Path.Combine(app.Environment.ContentRootPath, "loco.xml");
     var doc = new XDocument(
-        new XElement("locomotives",
-            locos.Select(l => new XElement("locomotive",
+        new XElement("locos",
+            locos.Select(l => new XElement("loco",
                 new XAttribute("id", string.IsNullOrWhiteSpace(l.Id) ? Guid.NewGuid().ToString() : l.Id),
                 new XElement("name", l.Name ?? string.Empty),
                 new XElement("address", l.address ?? string.Empty),
