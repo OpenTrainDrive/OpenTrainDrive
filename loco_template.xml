@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <locos>
-  <loco uid="f47ac10b-58cc-4372-a567-0e02b2c3d479" id="Re460Z" name="Re 460 rot" length="20" index="1">
+  <loco uid="f47ac10b-58cc-4372-a567-0e02b2c3d479" name="Re460 rot" length="20" index="1">
     <model manufacturer="Roco" scale="H0" catalognumber="43757">
+      <description>SBB Re 460 Werbelok Zürich Relax</description>
       <operator>SBB</operator>
       <class>Re 460</class>
       <serialnumber>460 023-5</serialnumber>
@@ -9,7 +10,7 @@
       <weight>80</weight>
       <vmax>200</vmax>
       <image>locoimages/re460_023_rot.png</image>
-      <notes>Werbelok Zürich Relax</notes>
+      <notes></notes>
     </model>
     <decoder>
       <protocol>DCC128</protocol>
@@ -74,7 +75,7 @@
       <serviceinterval>40</serviceinterval>
       <servicetable>
         <service date="2024-06-01">
-          <item>Radkontakte gereinigt</item>
+          <item>Radkontakte gereinigt, Getriebe geölt</item>
         </service>
       </servicetable>
     </operation>

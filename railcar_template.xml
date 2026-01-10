@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <railcars>
-    <railcar uid="70f969ca-c2bb-4b8b-8dff-9f3d76e4e98f" id="IC2000-Bt" name="IC2000 Bt" length="30" index="1">
+    <railcar uid="70f969ca-c2bb-4b8b-8dff-9f3d76e4e98f" name="IC2000 Bt" length="30" index="1">
         <model manufacturer="Roco" scale="H0" catalognumber="64855">
+            <description>Steuerwagen IC 2000</description>
             <operator>SBB</operator>
             <class>IC2000 Bt</class>
             <serialnumber></serialnumber>
@@ -9,7 +10,7 @@
             <weight>91</weight>
             <vmax>200</vmax>
             <image>locoimages/IC2000-Bt.png</image>
-            <notes>Steuerwagen IC 2000</notes>
+            <notes></notes>
         </model>
         <decoder>
             <protocol>DCC128</protocol>
@@ -27,7 +28,7 @@
             <serviceinterval></serviceinterval>
             <servicetable>
                 <service date="2024-06-01">
-                    <item>Radkontakte gereinigt, Getriebe geölt</item>
+                    <item>Radkontakte gereinigt</item>
                 </service>
             </servicetable>
         </operation>
