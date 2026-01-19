@@ -2,6 +2,8 @@
 <trains>
   <train id="d8487146-7006-4f48-b26c-7e01ac243b03">
     <name>Test2</name>
+    <number></number>
+    <category></category>
     <length>0</length>
     <vmax>0</vmax>
     <cars />
@@ -27,6 +29,8 @@
   </train>
   <train id="74453016-3f61-478c-96b0-06f835d6d803">
     <name>Güterzug</name>
+    <number></number>
+    <category></category>
     <length>60</length>
     <vmax>80</vmax>
     <cars>
@@ -41,20 +45,10 @@
       </car>
     </cars>
   </train>
-<<<<<<< HEAD
-  <train id="8e767134-aea6-45e7-84c4-4778fe475682">
-    <name>Selina</name>
-    <length>400</length>
-    <vmax>0</vmax>
-    <cars>
-      <car id="01f477a0-580b-4c4d-a50e-2ac05e7dfd76" type="loco" length="300" vmax="">
-        <name>Selina</name>
-      </car>
-      <car id="4866680d-1046-4123-867b-1613c9e47f3a" type="railcar" length="100" vmax="">
-        <name>Selina</name>
-=======
   <train id="13075ccf-731f-43a2-b951-3c4cfc428819">
-    <name>Kurzgüterzug</name>
+    <name>Kurzgüterzug1</name>
+    <number></number>
+    <category></category>
     <length>32</length>
     <vmax>80</vmax>
     <cars>
@@ -63,7 +57,6 @@
       </car>
       <car id="8a520c00-1526-4d6a-a64d-ebab2f831a36" type="railcar" length="12" vmax="80">
         <name>Kesselwage</name>
->>>>>>> 94669d19dbc4e8ae036456ec1841780e66e5717d
       </car>
     </cars>
   </train>
