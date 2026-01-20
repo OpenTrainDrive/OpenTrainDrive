@@ -148,6 +148,23 @@
             if (editorStatus) editorStatus.textContent = text;
         }
 
+        function isStopMode() {
+            return !!window.otdStopMode;
+        }
+
+        function applyStopMode(enabled) {
+            const active = !!enabled;
+            routeRow?.querySelectorAll('input').forEach(input => {
+                input.disabled = active;
+            });
+            routeRow?.querySelectorAll('.otd-zd-diskri-trigger').forEach(button => {
+                button.disabled = active;
+            });
+            if (active) {
+                diskriMenu?.classList.add('otd-hidden');
+            }
+        }
+
         function closeDatasetMenu() {
             if (!datasetMenu) return;
             datasetMenu.classList.remove('is-open');
@@ -277,6 +294,7 @@
             if (editorExtra) editorExtra.value = config.extra ?? '';
             closeZugDatenFenster();
             editor?.classList.remove('otd-hidden');
+            applyStopMode(isStopMode());
             if (editor && (!editor.style.left || !editor.style.top)) {
                 const workspace = document.querySelector('.otd-workspace');
                 const rect = workspace?.getBoundingClientRect();
@@ -387,18 +405,25 @@
             input.type = 'text';
             input.value = value;
             input.addEventListener('keydown', (event) => {
+                if (isStopMode()) return;
                 if (event.key !== 'Enter') return;
                 event.preventDefault();
                 if (input.value.trim() !== '') {
                     addRouteField('');
                 }
             });
-            input.addEventListener('input', () => persistEditor());
+            input.addEventListener('input', () => {
+                if (isStopMode()) return;
+                persistEditor();
+            });
             const diskriBtn = document.createElement('button');
             diskriBtn.type = 'button';
             diskriBtn.className = 'otd-zd-diskri-trigger';
             diskriBtn.dataset.diskri = diskriValue;
             diskriBtn.textContent = diskriValue;
+            const disabled = isStopMode();
+            input.disabled = disabled;
+            diskriBtn.disabled = disabled;
             field.appendChild(input);
             field.appendChild(diskriBtn);
             if (addSeparator) {
@@ -411,6 +436,7 @@
         }
 
         routeRow?.addEventListener('click', (event) => {
+            if (isStopMode()) return;
             const btn = event.target.closest('.otd-zd-diskri-trigger');
             if (!btn) return;
             if (!diskriMenu) return;
@@ -427,6 +453,7 @@
         });
 
         diskriMenu?.addEventListener('change', (event) => {
+            if (isStopMode()) return;
             const input = event.target;
             if (!(input instanceof HTMLInputElement)) return;
             if (input.type !== 'checkbox') return;
@@ -446,6 +473,12 @@
             if (datasetMenu.contains(event.target)) return;
             closeDatasetMenu();
         });
+
+        document.addEventListener('otd-stop-mode', (event) => {
+            applyStopMode(event.detail?.enabled);
+        });
+
+        applyStopMode(isStopMode());
     })();
 </script>
 

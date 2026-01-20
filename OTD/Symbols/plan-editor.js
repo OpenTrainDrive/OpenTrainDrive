@@ -84,15 +84,20 @@
     }
   }
 
-  function setEditMode(enabled) {
+  function setEditMode(enabled, options = null) {
     if (!canEditPlan()) {
       setStatus('Nur Admin darf den Gleisplan bearbeiten');
       return;
     }
+    const showEditor = options?.showEditor !== false;
     state.editMode = enabled;
     canvas.classList.toggle('is-editing', enabled);
     if (editor) {
-      editor.classList.toggle('otd-hidden', !enabled);
+      if (!enabled) {
+        editor.classList.add('otd-hidden');
+      } else if (showEditor) {
+        editor.classList.remove('otd-hidden');
+      }
     }
     if (palette) {
       palette.parentElement?.classList.toggle('is-disabled', !enabled);
@@ -1124,7 +1129,7 @@
   duplicateBtn?.addEventListener('click', duplicateSelected);
 
   closeBtn?.addEventListener('click', () => setEditMode(false));
-  menuEdit?.addEventListener('click', () => setEditMode(true));
+  menuEdit?.addEventListener('click', () => setEditMode(true, { showEditor: true }));
   objectClose?.addEventListener('click', () => objectWindow?.classList.add('otd-hidden'));
 
   contextEdit?.addEventListener('click', () => {
@@ -1135,7 +1140,7 @@
       hideContextMenu();
       return;
     }
-    setEditMode(true);
+    setEditMode(true, { showEditor: true });
     renderConfig();
     renderObjectWindow();
     hideContextMenu();
@@ -1249,4 +1254,8 @@
 
   document.addEventListener('otd-auth-change', applyAuthState);
   applyAuthState();
+
+  window.setPlanEditMode = function (enabled, options) {
+    setEditMode(!!enabled, options);
+  };
 })();

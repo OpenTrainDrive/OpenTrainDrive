@@ -139,6 +139,26 @@
                 </div>
             </div>
         </nav>
+        <div class="otd-toolbar" aria-label="Schnellaktionen">
+            <button class="otd-toolbar-button otd-toolbar-button--run" type="button" onclick="runToolbarAction();">
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                    <path d="M3 2 L14 8 L3 14 Z"></path>
+                </svg>
+                <span>Run</span>
+            </button>
+            <button class="otd-toolbar-button otd-toolbar-button--stop" type="button" onclick="stopToolbarAction();">
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                    <rect x="3" y="3" width="10" height="10"></rect>
+                </svg>
+                <span>Stop</span>
+            </button>
+            <button class="otd-toolbar-button otd-toolbar-button--edit" type="button" onclick="editToolbarAction();">
+                <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                    <path d="M11.8 2.2 L13.8 4.2 L6 12 L3 13 L4 10 Z"></path>
+                </svg>
+                <span>Edit</span>
+            </button>
+        </div>
         <div class="otd-status">
             <span class="otd-status-time" id="otd-zeit"></span>
         </div>
@@ -332,6 +352,55 @@
 
 <script src="~/symbols/plan-editor.js" asp-append-version="true"></script>
 <script>
+    function setStopMode(enabled) {
+        const next = !!enabled;
+        window.otdStopMode = next;
+        document.body.classList.toggle('otd-stop-mode', next);
+        document.dispatchEvent(new CustomEvent('otd-stop-mode', { detail: { enabled: next } }));
+        const stopButton = document.querySelector('.otd-toolbar-button--stop');
+        const runButton = document.querySelector('.otd-toolbar-button--run');
+        stopButton?.classList.toggle('is-active', next);
+        runButton?.classList.toggle('is-active', !next);
+        if (typeof window.addMeldeItem === 'function') {
+            window.addMeldeItem(
+                next ? 'Anlage ausgeschaltet (Stop-Modus)' : 'Anlage aktiviert (Run-Modus)',
+                'system',
+                next ? 'otd-melde-item-red' : 'otd-melde-item-green'
+            );
+        }
+    }
+
+    function runToolbarAction() {
+        setStopMode(false);
+        if (typeof window.openDriveFenster === 'function') {
+            window.openDriveFenster();
+        }
+        const closeBtn = document.getElementById('otd-plan-close');
+        if (closeBtn && !document.getElementById('otd-plan-editor')?.classList.contains('otd-hidden')) {
+            closeBtn.click();
+        }
+    }
+
+    function stopToolbarAction() {
+        setStopMode(true);
+    }
+
+    function editToolbarAction() {
+        if (typeof window.setPlanEditMode === 'function') {
+            window.setPlanEditMode(true, { showEditor: false });
+            return;
+        }
+        const menuEdit = document.getElementById('otd-menu-edit');
+        if (!menuEdit) return;
+        if (menuEdit.disabled) {
+            if (typeof window.addMeldeItem === 'function') {
+                window.addMeldeItem('Nur Admin darf den Gleisplan bearbeiten', 'system', 'otd-melde-item-gray');
+            }
+            return;
+        }
+        menuEdit.click();
+    }
+
     function requestFullscreenOnFirstInteraction() {
         const root = document.documentElement;
         if (!root.requestFullscreen) {
