@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<locos>
+  <loco id="695238b8-3b17-4a27-86e9-18f650ac808d">
+    <name>re460</name>
+    <address></address>
+    <length>20</length>
+    <vmax>200</vmax>
+    <vmin>1</vmin>
+    <notes>nichts</notes>
+  </loco>
+<<<<<<< HEAD
+  <loco id="42736d62-111c-479e-b526-7f42919f3d33">
+    <name>Re475</name>
+    <address>3</address>
+    <length>20</length>
+    <vmax>160</vmax>
+    <vmin></vmin>
+=======
+  <loco id="a9a5ed61-7d28-46ca-950d-9cc3929a62e0">
+    <name>Re475</name>
+    <address>3</address>
+    <length>20</length>
+    <vmax>200</vmax>
+    <vmin>1</vmin>
+>>>>>>> eb42e3e062ffde08a8405429027a313afcbc5bd2
+    <notes></notes>
+  </loco>
+</locos>

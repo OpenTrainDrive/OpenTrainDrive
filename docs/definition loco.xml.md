@@ -2,7 +2,7 @@
 
 ## Inhalt
 
-Die `loco_template.xml` Datei definiert Lokomotiventypen und deren Konfigurationen für den Modellbahnbetrieb. Sie enthält detaillierte Informationen über Lokomotivmodelle, Decodereinstellungen, Funktionszuordnungen, Geschwindigkeitstabellen und Betriebshistorie.
+Die `loco.xml` Datei definiert Lokomotiventypen und deren Konfigurationen für den Modellbahnbetrieb. Sie enthält detaillierte Informationen über Lokomotivmodelle, Decodereinstellungen, Funktionszuordnungen, Geschwindigkeitstabelle und Betriebshistorie.
 
 ## Dateistruktur
 
@@ -22,12 +22,13 @@ Container-Element für die einzelnen Lokomotiven
 
 ### Attribute
 
-| Attribut   | Typ  | Beschreibung                                  | Beispiel                                 |
-| ---------- | ---- | --------------------------------------------- | ---------------------------------------- |
+
+| Attribut | Typ  | Beschreibung                                  | Beispiel                               |
+| ---------- | ------ | ----------------------------------------------- | ---------------------------------------- |
 | `uid`    | UUID | Eindeutige Kennung der Lokomotive             | `f47ac10b-58cc-4372-a567-0e02b2c3d479` |
 | `name`   | Text | Anzeigename der Lokomotive                    | `Re460 rot`                            |
 | `length` | Zahl | Länge (in global konfigurierter Masseinheit) | `20`                                   |
-| `index`  | Zahl | Anzeigereihenfolge                            | `1`                                    |
+| `index`  | Zahl | Anzeigeposition in der Konfiguration          | `1`                                    |
 
 ### Unterelemente
 
@@ -35,12 +36,13 @@ Container-Element für die einzelnen Lokomotiven
 
 ## 1. Modellinformationen: `<model>`
 
-Beschreibt die Vorbild- und physikalischen Eigenschaften der Lokomotive.
+Beschreibt die Eigenschaften des Vorbilds
 
 ### Attribute
 
-| Attribut          | Typ  | Beschreibung             | Beispiel         |
-| ----------------- | ---- | ------------------------ | ---------------- |
+
+| Attribut        | Typ  | Beschreibung             | Beispiel       |
+| ----------------- | ------ | -------------------------- | ---------------- |
 | `manufacturer`  | Text | Hersteller des Modells   | `Roco`         |
 | `scale`         | Text | Modellmassstab           | `H0` (H0-Spur) |
 | `catalognumber` | Text | Hersteller Katalognummer | `43757`        |
@@ -49,96 +51,94 @@ Beschreibt die Vorbild- und physikalischen Eigenschaften der Lokomotive.
 
 #### `<description>`
 
-Vollständige Beschreibung der Lokomotive.
+Vollständige Beschreibung der Lokomotive
 
 - **Typ:** Text
 - **Beispiel:**`SBB Re 460 Werbelok Zürich Relax`
 
 #### `<operator>`
 
-Eisenbahnunternehmen, das das Vorbild betreibt.
+Eisenbahnunternehmen, das das Vorbild betreibt
 
 - **Typ:** Text
 - **Beispiel:**`SBB` (Schweizerische Bundesbahn)
 
 #### `<class>`
 
-Lokomotivenklasse/Baureihe.
+Lokomotivenklasse/Baureihe
 
 - **Typ:** Text
 - **Beispiel:**`Re 460`
 
 #### `<serialnumber>`
 
-Fabriknummer des Vorbildlokomotive.
+Betriebsnummer der Lokomotive
 
 - **Typ:** Text
 - **Beispiel:**`460 023-5`
 
 #### `<tractiontype>`
 
-Antriebsart.
+Antriebsart
 
 - **Typ:** Text
-- **Werte:**`electric` (Elektro),`diesel` (Diesel),`steam` (Dampf), etc.
+- **Werte:**`electric` (elektrisch),`diesel` (Diesel),`steam` (Dampf) usw.
 - **Beispiel:**`electric`
 
 #### `<weight>`
 
-Gewicht in Tonnen.
+Gewicht in Tonnen
 
 - **Typ:** Zahl
 - **Beispiel:**`80`
 
 #### `<vmax>`
 
-Höchstgeschwindigkeit in km/h.
+Höchstgeschwindigkeit (Masseinheit gemäss globaler Konfiguration OpenTrainDrive)
 
 - **Typ:** Zahl
 - **Beispiel:**`200`
 
 #### `<image>`
 
-Pfad zur Lokomotivabbildung (relativ zum Projektverzeichnis).
+Symbol/Bild für die Lokomotive (relativ zum Projektverzeichnis)
 
 - **Typ:** Text
 - **Beispiel:**`locoimages/re460_023_rot.png`
 
 #### `<notes>`
 
-Zusätzliche Notizen oder Bemerkungen.
+Zusätzliche Notizen oder Bemerkungen
 
 - **Typ:** Text
-- **Beispiel:** `` (leer)
+- **Beispiel:** Anbauteile in Box "Kleinteile" gelagert
 
 ---
 
 ## 2. Decoder-Konfiguration: `<decoder>`
 
-DCC-Decodereinstellungen für digitale Steuerung.
+DCC-Decodereinstellungen für digitale Steuerung
 
 ### Unterelemente
 
 #### `<protocol>`
 
-DCC-Protokollstandard.
+Decoder-Protokoll
 
 - **Typ:** Text
-- **Werte:**`DCC128`,`DCC28`,`DCC14`, etc.
-- **Beschreibung:** DCC128 unterstützt 128 Fahrstufen
-- **Beispiel:**`DCC128`
+- **Werte:**`DCC128`,`DCC28`,`DCC14`,`MM`,`MFX` etc.
+- **Beispiel:**`DCC128` (DDC, 128 Fahrstufen)
 
 #### `<address>`
 
-DCC-Decoder-Adresse (Lokomotivenummer).
+DCC-Decoder-Adresse
 
 - **Typ:** Zahl
-- **Bereich:** Kurzadresse: 1-127, Langadresse: 128-10239
 - **Beispiel:**`3`
 
 #### `<addresstype>`
 
-Typ der verwendeten DCC-Adresse.
+Adress-Typ (nur bei DCC-Dekodern)
 
 - **Typ:** Text
 - **Werte:**`short` (kurz),`long` (lang)
@@ -156,36 +156,39 @@ Container für Geschwindigkeitskurven-Zuordnung. Siehe [Geschwindigkeitstabelle]
 
 ## Funktionstabelle: `<functiontable>`
 
-Ordnet DCC-Funktionstasten Lokomotivenfeatures zu (Lichter, Geräusche, etc.).
+Ordnet DCC-Funktionstasten Lokomotivenfeatures zu (Beleuchtung, Geräusche, etc.).
 
 ### Funktionselement: `<function>`
 
 #### Attribute
 
-| Attribut        | Typ         | Beschreibung                               | Beispiel                                                 |
-| --------------- | ----------- | ------------------------------------------ | -------------------------------------------------------- |
-| `no`          | Zahl        | Funktionsnummer (0-28)                     | `0`                                                    |
-| `description` | Text        | Funktionsbeschreibung                      | `3x weiss/1x weiss <> 1x weiss/3x weiss`               |
-| `actuation`   | Text        | Auslösungsart:`toggle` oder `impulse` | `toggle`                                               |
-| `type`        | Text        | Funktionskategorie: `headlight`, `sound`, `interiorlight` oder `driving`                       | `headlight` |
-| `visible`     | Wahr/Falsch | Anzeige in Benutzeroberfläche             | `true`, `false`                                      |
-| `image`       | Text        | Symbol-Dateiname für UI                   | `headlight.svg`                                        |
+
+| Attribut      | Typ         | Beschreibung                                                            | Beispiel                                 |
+| --------------- | ------------- | ------------------------------------------------------------------------- | ------------------------------------------ |
+| `no`          | Zahl        | Funktionsnummer (0-28)                                                  | `0`                                      |
+| `description` | Text        | Funktionsbeschreibung                                                   | `3x weiss/1x weiss <> 1x weiss/3x weiss` |
+| `actuation`   | Text        | Betätigung:`toggle` oder `impulse`                                     | `toggle`                                 |
+| `type`        | Text        | Funktionskategorie:`headlight`, `sound`, `interiorlight` oder `driving` | `headlight`                              |
+| `visible`     | Wahr/Falsch | Anzeige in Benutzeroberfläche                                          | `true`, `false`                          |
+| `image`       | Text        | Symbol-Dateiname für UI                                                | `headlight.svg`                          |
 
 #### Funktionstypen
 
-| Typ               | Beschreibung                                        |
-| ----------------- | --------------------------------------------------- |
-| `headlight`     | Beleuchtungsfunktionen (Lichter, Warnsignale, etc.) |
-| `sound`         | Soundeffekte und Audio                              |
-| `interiorlight` | Innenbeleuchtung                                    |
-| `driving`       | Fahrtmodi und Fahrtfunktionen                       |
+
+| Typ             | Beschreibung                  |
+| ----------------- | ------------------------------- |
+| `headlight`     | Stirnbeleuchtung              |
+| `sound`         | Soundeffekte und Audio        |
+| `interiorlight` | Innenbeleuchtung              |
+| `driving`       | Fahrtmodus (z.B. Rangiergang) |
 
 #### Auslösungsarten
 
-| Art         | Beschreibung                                          |
+
+| Art       | Beschreibung                                        |
 | ----------- | ----------------------------------------------------- |
-| `toggle`  | Ein-/Aus-Schalter (Tastendruck schaltet um)           |
-| `impulse` | Einmalige Aktion (Tastendruck wird einmal ausgelöst) |
+| `toggle`  | Ein-/Aus-Schalter (Aktivierung schaltet um)         |
+| `impulse` | Einmalige Aktion (eingeschaltet, solange aktiviert) |
 
 #### Beispiel
 
@@ -205,14 +208,15 @@ Ordnet DCC-Fahrstufen tatsächlichen Geschwindigkeitswerten für realistische Ge
 
 #### Attribute
 
-| Attribut | Typ  | Beschreibung                          | Beispiel |
-| -------- | ---- | ------------------------------------- | -------- |
-| `step` | Zahl | Fahrstufennummer (1-27 für DCC128)   | `1`    |
-| `v`    | Zahl | Tatsächliche Geschwindigkeit in km/h | `1`    |
+
+| Attribut | Typ  | Beschreibung                                                                                  | Beispiel |
+| ---------- | ------ | ----------------------------------------------------------------------------------------------- | ---------- |
+| `step`   | Zahl | Fahrstufennummer (1-27 für DCC128)                                                           | `1`      |
+| `v`      | Zahl | Tatsächliche Vorbild-Geschwindigkeit (Einheit gemäss globaler Konfiguration OpenTrainDrive) | `1`      |
 
 #### Beschreibung
 
-Stellt eine nichtlineare Geschwindigkeitskurve zur Verfügung. DCC-Fahrstufen entsprechen nicht linear zur realen Geschwindigkeit; diese Tabelle korrigiert das.
+Stellt beim Einmessen eine fahrzeugspezifische Geschwindigkeitskurve bereit, die von OpenTrainDrive zur Berechnung von Beschleunigungs- und Bremskurven verwendet wird. Bei mehr als 27 Fahrstufen (z.B. 128) wird interpoliert.
 
 #### Beispiel
 
@@ -261,17 +265,18 @@ Empfohlenes Wartungsintervall in Stunden.
 
 Container für Wartungseinträge.
 
-##### Service-Element: `<service>`
+##### Service-Element: `<issue>`
 
 ###### Attribute
 
-| Attribut | Typ            | Beschreibung  | Beispiel       |
-| -------- | -------------- | ------------- | -------------- |
-| `date` | ISO 8601 Datum | Wartungsdatum | `2024-06-01` |
+
+| Attribut | Typ            | Beschreibung  | Beispiel     |
+| ---------- | ---------------- | --------------- | -------------- |
+| `date`   | ISO 8601 Datum | Wartungsdatum | `2024-06-01` |
 
 ###### Unterelement: `<item>`
 
-Beschreibung der durchgeführten Arbeiten.
+Beschreibung der durchgeführten Arbeiten (mehrere Items möglich).
 
 - **Typ:** Text
 - **Beispiel:**`Radkontakte gereinigt, Getriebe geölt`
@@ -392,4 +397,3 @@ Beschreibung der durchgeführten Arbeiten.
 - `train_template.xml` - Zugkomposition-Vorlagen
 - `railcar_template.xml` - Güterwagen-Vorlagen
 - `plan.xml` - Gleisplan-Definitionen
-
