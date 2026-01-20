@@ -58,7 +58,7 @@
       </state>
     </states>
   </switchingdevice>
-  <switchingdevice uid="a7b8c9d0-e1f2-4a3b-5c6d-7e8f9a0b1c2d" name="S1" type="signal" index="4">
+  <switchingdevice uid="a7b8c9d0-e1f2-4a3b-5c6d-7e8f9a0b1c2d" id="S1" type="signal" index="4">
     <model>
       <signalsystem>SBB-L</signalsystem>
       <notes>Hauptsignal SBB Typ L</notes>
@@ -68,25 +68,25 @@
       <protocol>DCC</protocol>
     </decoder>
     <states>
-      <state name="Halt" description="Halt">
+      <state id="Halt" description="Halt">
         <decoder address="50" output="0" />
         <decoder address="51" output="0" />
         <decoder address="52" output="0" />
       </state>
-      <state name="1" description="Freie Fahrt">
+      <state id="1" description="Freie Fahrt">
         <decoder address="50" output="1" />
         <decoder address="51" output="0" />
         <decoder address="52" output="0" />
       </state>
-      <state name="2" description="Fahrbegriff 2 (40 km/h)">
+      <state id="2" description="Fahrbegriff 2 (40 km/h)">
         <decoder address="50" output="1" />
         <decoder address="51" output="1" />
         <decoder address="52" output="0" />
       </state>
-      <state name="HS" description="Hilfssignal">
+      <state id="HS" description="Hilfssignal">
         <decoder address="53" output="1" />
       </state>
-      <state name="BS" description="besetzte Einfahrt">
+      <state id="BS" description="besetzte Einfahrt">
         <decoder address="54" output="1" />
       </state>
     </states>
