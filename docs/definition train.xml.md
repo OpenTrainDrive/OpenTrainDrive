@@ -24,12 +24,13 @@ Definiert einen kompletten Zug mit Lokomotive(n) und Wagen
 
 ### Attribute
 
-| Attribut | Typ  | Beschreibung                                  | Beispiel                               |
-| ---------- | ------ | ----------------------------------------------- | ---------------------------------------- |
-| `uid`    | UUID | Eindeutige Kennung des Zuges                  | `d8487146-7006-4f48-b26c-7e01ac243b03` |
-| `name`   | Text | Anzeigename des Zuges                         | `Güterzug 1`                           |
+
+| Attribut | Typ  | Beschreibung                                                  | Beispiel                               |
+| ---------- | ------ | --------------------------------------------------------------- | ---------------------------------------- |
+| `uid`    | UUID | Eindeutige Kennung des Zuges                                  | `d8487146-7006-4f48-b26c-7e01ac243b03` |
+| `name`   | Text | Anzeigename des Zuges                                         | `Güterzug 1`                          |
 | `length` | Zahl | Gesamtlänge des Zuges (in global konfigurierter Masseinheit) | `110`                                  |
-| `index`  | Zahl | Anzeigeposition in der Konfiguration          | `1`                                    |
+| `index`  | Zahl | Anzeigeposition in der Konfiguration                          | `1`                                    |
 
 ### Unterelemente
 
@@ -51,7 +52,7 @@ Gesamtgewicht des gesamten Zuges (inklusive aller Wagen) in Tonnen
 
 - **Typ:** Zahl
 - **Beispiel:** `1200`
-- **Berechnung:** Summe aus Lokomotive(n) + alle Wagen
+- **Hinweis:** Summe aus Lokomotive(n) + allen Wagen. Wenn nicht eingetragen, erfolgt die Berechnung anhand der Summe des Gewichts der einzelnen Wagen.
 
 ### `<vmax>`
 
@@ -59,7 +60,7 @@ Maximale Betriebsgeschwindigkeit des Zuges in km/h
 
 - **Typ:** Zahl
 - **Beispiel:** `80`
-- **Hinweis:** Sollte die Höchstgeschwindigkeit aller beteiligten Fahrzeuge berücksichtigen (meist die langsamste)
+- **Hinweis:** Sollte die Höchstgeschwindigkeit aller beteiligten Fahrzeuge berücksichtigen (meist die langsamste). Wenn nicht eingetragen, erfolgt die Berechnung anhand der kleinsten Höchstgeschwindigkeit bei den einzelnen Wagen.
 
 ### `<image>`
 
@@ -99,10 +100,11 @@ Referenziert eine Lokomotive aus `loco.xml`
 
 ##### Attribute
 
-| Attribut    | Typ  | Beschreibung                                     | Beispiel                               |
-| ------------- | ------ | -------------------------------------------------- | ---------------------------------------- |
-| `f_uid`     | UUID | Eindeutige Kennung der Lokomotive (aus loco.xml) | `f47ac10b-58cc-4372-a567-0e02b2c3d479` |
-| `position`  | Zahl | Position im Zug (1 = Zuglok/Spitzenposition)     | `1`                                    |
+
+| Attribut   | Typ  | Beschreibung                                     | Beispiel                               |
+| ------------ | ------ | -------------------------------------------------- | ---------------------------------------- |
+| `f_uid`    | UUID | Eindeutige Kennung der Lokomotive (aus loco.xml) | `f47ac10b-58cc-4372-a567-0e02b2c3d479` |
+| `position` | Zahl | Position im Zug (1 = Zuglok/Spitzenposition)     | `1`                                    |
 
 **Hinweis:** Der Parameter `f_uid` steht für "foreign uid" (fremde/externe ID) und verweist auf die uid einer Lokomotive in der `loco.xml` Datei.
 
@@ -112,10 +114,11 @@ Referenziert einen Wagen aus `railcar.xml`
 
 ##### Attribute
 
-| Attribut    | Typ  | Beschreibung                                  | Beispiel                               |
-| ------------- | ------ | ---------------------------------------------- | ---------------------------------------- |
-| `f_uid`     | UUID | Eindeutige Kennung des Wagens (aus railcar.xml) | `g2b3c4d5-e6f7-8901-bcde-f01234567890` |
-| `position`  | Zahl | Position im Zug (nach den Lokomotiven)          | `3`                                    |
+
+| Attribut   | Typ  | Beschreibung                                    | Beispiel                               |
+| ------------ | ------ | ------------------------------------------------- | ---------------------------------------- |
+| `f_uid`    | UUID | Eindeutige Kennung des Wagens (aus railcar.xml) | `g2b3c4d5-e6f7-8901-bcde-f01234567890` |
+| `position` | Zahl | Position im Zug (nach den Lokomotiven)          | `3`                                    |
 
 **Hinweis:** Der Parameter `f_uid` verweist auf die uid eines Wagens in der `railcar.xml` Datei.
 
@@ -234,33 +237,36 @@ Referenziert einen Wagen aus `railcar.xml`
 
 ### Zugstypen (nach Verwendung)
 
-| Typ | Beschreibung | Typische Zusammensetzung |
-| ----- | -------------- | ----------------------- |
-| **Reisezug** | Personenbeförderung Fernverkehr | 1 Lok + 6-8 Personenwagen |
-| **S-Bahn** | Nahverkehr, oft mehrteilig | 2-4 Triebköpfe + Mittelwagen |
-| **Regional-Zug** | Regionaler Personenverkehr | 1-2 Lok + 3-4 Wagen |
-| **Güterzug** | Güterbeförderung | 1-3 Lok + 8-15+ Güterwagen |
-| **Mischtransport** | Personen und Güter | 1-2 Lok + gemischte Wagen |
-| **Spezialzug** | Besondere Güter/Zwecke | Variabel |
+
+| Typ                | Beschreibung                     | Typische Zusammensetzung      |
+| -------------------- | ---------------------------------- | ------------------------------- |
+| **Reisezug**       | Personenbeförderung Fernverkehr | 1 Lok + 6-8 Personenwagen     |
+| **S-Bahn**         | Nahverkehr, oft mehrteilig       | 2-4 Triebköpfe + Mittelwagen |
+| **Regional-Zug**   | Regionaler Personenverkehr       | 1-2 Lok + 3-4 Wagen           |
+| **Güterzug**      | Güterbeförderung               | 1-3 Lok + 8-15+ Güterwagen   |
+| **Mischtransport** | Personen und Güter              | 1-2 Lok + gemischte Wagen     |
+| **Spezialzug**     | Besondere Güter/Zwecke          | Variabel                      |
 
 ### Typische Geschwindigkeiten
 
-| Zugtyp | vmax (km/h) |
-| --------- | ------------- |
-| Güterzug | 60-80 |
-| Regionalzug | 120-140 |
-| S-Bahn | 120-160 |
-| Intercity | 160-200 |
-| Hochgeschwindigkeit | 200-300+ |
+
+| Zugtyp              | vmax (km/h) |
+| --------------------- | ------------- |
+| Güterzug           | 60-80       |
+| Regionalzug         | 120-140     |
+| S-Bahn              | 120-160     |
+| Intercity           | 160-200     |
+| Hochgeschwindigkeit | 200-300+    |
 
 ### Typische Zuggewichte
 
-| Zugtyp | Gewicht (Tonnen) |
-| --------- | ------------------ |
-| S-Bahn 3-teilig | 250-350 |
-| Regionalzug | 300-500 |
-| IC 6-teilig | 500-700 |
-| Güterzug | 800-1500+ |
+
+| Zugtyp          | Gewicht (Tonnen) |
+| ----------------- | ------------------ |
+| S-Bahn 3-teilig | 250-350          |
+| Regionalzug     | 300-500          |
+| IC 6-teilig     | 500-700          |
+| Güterzug       | 800-1500+        |
 
 ---
 
@@ -301,6 +307,7 @@ Züge verbinden die Fahrzeugsdefinitionen (`loco.xml`, `railcar.xml`) mit den Fa
 ### Berechnung der Zugparameter
 
 #### Gesamtlänge
+
 ```
 Gesamtlänge = Summe(Fahrzeuglängen) + Kupplungsabstände
 ```
@@ -308,6 +315,7 @@ Gesamtlänge = Summe(Fahrzeuglängen) + Kupplungsabstände
 Beispiel: 2 Lok à 15m + 5 Wagen à 25m = 30m + 125m = 155m (ohne Kupplungen)
 
 #### Gesamtgewicht
+
 ```
 Gesamtgewicht = Summe(alle Fahrzeuggewichte)
 ```
@@ -315,6 +323,7 @@ Gesamtgewicht = Summe(alle Fahrzeuggewichte)
 Beispiel: 2 Lok à 80t + 8 Wagen à 85t = 160t + 680t = 840t
 
 #### Maximale Geschwindigkeit
+
 ```
 vmax = min(vmax_loko, vmax_wagen1, vmax_wagen2, ...)
 ```
@@ -328,6 +337,7 @@ Die vmax des Zuges ist die niedrigste vmax aller beteiligten Fahrzeuge.
 ### 1. Realistische Zusammensetzung
 
 Züge sollten realistische Konfigurationen widerspiegeln:
+
 - Schwere Güterzüge benötigen starke Lokomotiven
 - Leichte Personenzüge können mit schwächeren Lokomotiven fahren
 - Steilstrecken erfordern möglicherweise Mehrfachtraktion oder Schublok
@@ -335,6 +345,7 @@ Züge sollten realistische Konfigurationen widerspiegeln:
 ### 2. Konsistente Nummern
 
 Die Zugnummern sollten konsistent mit echten Fahrplan-Nummern sein:
+
 - IC-Züge: IC 1000-1999
 - Regional-Züge: RE 1000-1999
 - S-Bahnen: S1, S2, etc.
@@ -343,6 +354,7 @@ Die Zugnummern sollten konsistent mit echten Fahrplan-Nummern sein:
 ### 3. Bilddateien
 
 Zugsymbole sollten:
+
 - Im Verzeichnis `trainimages/` gespeichert sein
 - Aussagekräftig benannt sein
 - Konsistente Größe und Format haben (z.B. 200x100 Pixel)
@@ -350,6 +362,7 @@ Zugsymbole sollten:
 ### 4. Wartung von f_uid Referenzen
 
 Bei Änderungen an `loco.xml` oder `railcar.xml`:
+
 - `f_uid` muss aktualisiert werden, wenn sich die uuid eines Fahrzeugs ändert
 - Orphaned Referenzen (nicht vorhandene Fahrzeuge) sollten bereinigt werden
 - Validierungstools können helfen, fehlerhafte Referenzen zu erkennen
@@ -357,6 +370,7 @@ Bei Änderungen an `loco.xml` oder `railcar.xml`:
 ### 5. Test und Validierung
 
 Vor der Verwendung sollten Züge getestet werden auf:
+
 - Gültige f_uid Referenzen
 - Realistische Gewichte und Geschwindigkeiten
 - Sinnvolle Zusammensetzung
@@ -378,21 +392,26 @@ Vor der Verwendung sollten Züge getestet werden auf:
 ## Häufig gestellte Fragen
 
 ### F: Kann ein Zug ohne Lokomotive fahren?
+
 **A:** Nein. Ein Zug benötigt mindestens eine Lokomotive, um fahren zu können. Triebzüge sind spezielle Lokomotiven mit Passagierräumen.
 
 ### F: Wie viele Lokomotiven kann ein Zug haben?
+
 **A:** Theoretisch unbegrenzt, praktisch üblicherweise 1-3. Mehrfachtraktion ist für schwere Güterzüge oder Bergstrecken üblich.
 
 ### F: Kann die Lokomotive am Ende des Zuges stehen?
+
 **A:** Ja, bei Schubfahrt (z.B. in Bergstrecken) kann eine Schublok am Ende positioniert sein.
 
 ### F: Was passiert, wenn eine f_uid nicht existiert?
+
 **A:** Das ist ein Fehler. Die Referenz sollte auf ein gültiges Fahrzeug in der entsprechenden Datei (loco.xml oder railcar.xml) verweisen.
 
 ### F: Wie beeinflusst die Reihenfolge der Fahrzeuge die Simulation?
+
 **A:** Die Position bestimmt die physikalische Anordnung im Zug und ist wichtig für:
+
 - Realistische Darstellung
 - Korrekte Gewichtsverteilung (simuliert)
 - Fahrdynamik und Beschleunigung
 - Kupplung und Bremskräfte
-
