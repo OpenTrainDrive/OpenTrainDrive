@@ -188,10 +188,11 @@
                 const doc = new DOMParser().parseFromString(xml, 'application/xml');
                 const list = [];
                 doc.querySelectorAll('locos > loco').forEach(node => {
+                    const modelNode = node.querySelector('model');
                     list.push({
-                        id: node.getAttribute('id') || crypto.randomUUID(),
-                        name: node.querySelector('name')?.textContent ?? '',
-                        vmax: node.querySelector('vmax')?.textContent ?? ''
+                        id: node.getAttribute('uid') || crypto.randomUUID(),
+                        name: node.getAttribute('name') ?? '',
+                        vmax: modelNode?.querySelector('vmax')?.textContent ?? ''
                     });
                 });
                 state.items = list;

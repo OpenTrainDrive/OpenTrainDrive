@@ -1,3 +1,4 @@
+
 <div class="otd-train-window otd-hidden" id="otd-train" role="dialog" aria-label="Zuege">
     <div class="otd-train-titlebar" data-drag-handle="true">
         <span class="otd-train-title">Zuege</span>
@@ -8,47 +9,128 @@
     </div>
     <div class="otd-train-body">
         <div class="otd-train-form">
-            <div class="otd-train-overview">
-                <div class="otd-train-overview-head">
-                    <span>Zuguebersicht</span>
-                    <button type="button" id="train-new">Neu</button>
-                    <button type="button" id="train-delete">Loeschen</button>
+            <div class="otd-train-tabs" role="tablist" aria-label="Zug Bereiche">
+                <button type="button" class="otd-train-tab" data-tab="overview">Uebersicht</button>
+                <button type="button" class="otd-train-tab is-active" data-tab="general">Allgemein</button>
+                <button type="button" class="otd-train-tab" data-tab="vehicles">Fahrzeuge</button>
+                <button type="button" class="otd-train-tab" data-tab="details">Einzelheiten</button>
+            </div>
+
+            <div class="otd-train-tabpanel" data-tab="overview">
+                <div class="otd-train-section">
+                    <div class="otd-train-section-title">Uebersicht</div>
+                    <div class="otd-train-overview-text">
+                        Waehle rechts einen Zug oder lege einen neuen an. Speichern schreibt direkt nach train.xml.
+                        <ul class="otd-train-overview-list">
+                            <li>Allgemein: Grunddaten und Stamminfo.</li>
+                            <li>Fahrzeuge: Zusammenstellung per Drag & Drop.</li>
+                            <li>Einzelheiten: Beschreibung, Gewicht, Vmax, Notes.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="otd-train-overview-list" id="train-list"></div>
             </div>
-            <label>
-                Zugname
-                <input type="text" id="train-name" maxlength="24" />
-            </label>
-            <label>
-                Zugnummer
-                <input type="text" id="train-number" maxlength="16" />
-            </label>
-            <label>
-                Kategorie
-                <input type="text" id="train-category" maxlength="16" />
-            </label>
-            <div class="otd-train-length">
-                Gesamtlaenge: <span id="train-length">0 cm</span>
+
+            <div class="otd-train-tabpanel is-active" data-tab="general">
+                <div class="otd-train-section">
+                    <div class="otd-train-section-title">Grunddaten</div>
+                    <div class="otd-train-grid">
+                        <label>
+                            UID
+                            <input type="text" id="train-uid" maxlength="64" />
+                        </label>
+                        <label>
+                            Name
+                            <input type="text" id="train-name" maxlength="32" />
+                        </label>
+                        <label>
+                            Index
+                            <input type="number" id="train-index" min="0" max="999" />
+                        </label>
+                        <label class="otd-train-span-2">
+                            Image
+                            <input type="text" id="train-image" maxlength="128" />
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="otd-train-speed">
-                Vmax: <input type="number" id="train-vmax" min="0" step="0.1" /> km/h
-                <span class="otd-train-speed-hint">Max: <span id="train-vmax-max">0</span> km/h</span>
+
+            <div class="otd-train-tabpanel" data-tab="vehicles">
+                <div class="otd-train-section">
+                    <div class="otd-train-section-title">Fahrzeuge</div>
+                    <div class="otd-train-metrics">
+                        <div>Gesamtlaenge: <span id="train-length">0 cm</span></div>
+                        <div>Achsen: <span id="train-axles">0</span></div>
+                        <div>Vmax: <input type="number" id="train-vmax" min="0" step="0.1" /> km/h <span class="otd-train-hint">Max: <span id="train-vmax-max">0</span></span></div>
+                    </div>
+                    <div class="otd-train-dropzone" id="train-dropzone">
+                        Lok oder Waggon hier ablegen
+                    </div>
+                    <div class="otd-train-list-body" id="train-rows"></div>
+                    <div class="otd-train-table-actions">
+                        <button type="button" id="train-clear">Leeren</button>
+                    </div>
+                </div>
             </div>
-            <div class="otd-train-dropzone" id="train-dropzone">
-                Lok oder Waggon hier ablegen
+
+            <div class="otd-train-tabpanel" data-tab="details">
+                <div class="otd-train-section">
+                    <div class="otd-train-section-title">Einzelheiten</div>
+                    <div class="otd-train-grid otd-train-grid-wide">
+                        <label class="otd-train-span-2">
+                            Description
+                            <textarea id="train-description" rows="3" maxlength="240"></textarea>
+                        </label>
+                        <label>
+                            Weight (t)
+                            <input type="number" id="train-weight" min="0" step="0.1" />
+                        </label>
+                        <label>
+                            Notes
+                            <textarea id="train-notes" rows="3" maxlength="240"></textarea>
+                        </label>
+                    </div>
+                </div>
             </div>
+
             <div class="otd-train-buttons">
+                <button type="button" id="train-new">Neu</button>
                 <button type="button" id="train-save">Speichern</button>
+                <button type="button" id="train-delete">Loeschen</button>
                 <button type="button" id="train-load">Aktualisieren</button>
             </div>
         </div>
         <div class="otd-train-list">
             <div class="otd-train-list-head">
-                <span>Zusammenstellung</span>
-                <button type="button" id="train-clear">Leeren</button>
+                <span>Vorhandene Zuege</span>
+                <button type="button" id="train-reload">Aktualisieren</button>
             </div>
-            <div class="otd-train-list-body" id="train-rows"></div>
+            <div class="otd-train-list-content">
+                <div class="otd-train-list-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>UID</th>
+                                <th>Length</th>
+                                <th>Axles</th>
+                                <th>Vmax</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="train-list-rows"></tbody>
+                    </table>
+                </div>
+                <div class="otd-train-catalogs">
+                    <div class="otd-train-catalog">
+                        <div class="otd-train-catalog-head">Lokomotiven</div>
+                        <div class="otd-train-catalog-body" id="train-loco-catalog"></div>
+                    </div>
+                    <div class="otd-train-catalog">
+                        <div class="otd-train-catalog-head">Waggons</div>
+                        <div class="otd-train-catalog-body" id="train-railcar-catalog"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -60,26 +142,40 @@
         if (!panel) return;
 
         const statusEl = document.getElementById('otd-train-status');
+        const uidInput = document.getElementById('train-uid');
         const nameInput = document.getElementById('train-name');
-        const numberInput = document.getElementById('train-number');
-        const categoryInput = document.getElementById('train-category');
+        const indexInput = document.getElementById('train-index');
+        const imageInput = document.getElementById('train-image');
+        const descriptionInput = document.getElementById('train-description');
+        const weightInput = document.getElementById('train-weight');
+        const notesInput = document.getElementById('train-notes');
         const lengthEl = document.getElementById('train-length');
+        const axlesEl = document.getElementById('train-axles');
         const vmaxInput = document.getElementById('train-vmax');
         const vmaxMaxEl = document.getElementById('train-vmax-max');
         const dropzone = document.getElementById('train-dropzone');
         const rowsBody = document.getElementById('train-rows');
-        const trainList = document.getElementById('train-list');
-        const newBtn = document.getElementById('train-new');
-        const deleteBtn = document.getElementById('train-delete');
-        const saveBtn = document.getElementById('train-save');
-        const loadBtn = document.getElementById('train-load');
+        const listBody = document.getElementById('train-list-rows');
+        const locoCatalogEl = document.getElementById('train-loco-catalog');
+        const railcarCatalogEl = document.getElementById('train-railcar-catalog');
         const clearBtn = document.getElementById('train-clear');
+        const newBtn = document.getElementById('train-new');
+        const saveBtn = document.getElementById('train-save');
+        const deleteBtn = document.getElementById('train-delete');
+        const loadBtn = document.getElementById('train-load');
+        const reloadBtn = document.getElementById('train-reload');
+        const tabButtons = panel.querySelectorAll('.otd-train-tab');
+        const tabPanels = panel.querySelectorAll('.otd-train-tabpanel');
 
         const state = {
             trains: [],
             selectedTrainId: null,
             items: [],
             loadedOnce: false,
+            vehicleCatalog: {
+                loco: {},
+                railcar: {}
+            },
             vmaxOverride: null
         };
 
@@ -87,39 +183,29 @@
             if (statusEl) statusEl.textContent = text;
         }
 
-        function getSelectedTrain() {
-            return state.trains.find(t => t.id === state.selectedTrainId) || null;
+        function setActiveTab(tabKey) {
+            tabButtons.forEach(btn => {
+                const active = btn.dataset.tab === tabKey;
+                btn.classList.toggle('is-active', active);
+                btn.setAttribute('aria-selected', active ? 'true' : 'false');
+            });
+            tabPanels.forEach(panelEl => {
+                const active = panelEl.dataset.tab === tabKey;
+                panelEl.classList.toggle('is-active', active);
+                panelEl.setAttribute('aria-hidden', active ? 'false' : 'true');
+            });
         }
 
-        function renderTrainList() {
-            if (!trainList) return;
-            trainList.innerHTML = '';
-            for (const train of state.trains) {
-                const entry = document.createElement('button');
-                entry.type = 'button';
-                entry.className = 'otd-train-overview-item';
-                if (train.id === state.selectedTrainId) {
-                    entry.classList.add('is-selected');
-                }
-                const label = train.name?.trim() ? train.name.trim() : '(Neuer Zug)';
-                entry.textContent = label;
-                entry.dataset.id = train.id;
-                trainList.appendChild(entry);
-            }
-        }
-
-        function parseLength(value) {
+        function parseNumber(value) {
             if (value === null || value === undefined) return 0;
             const text = value.toString().trim().replace(',', '.');
             const num = Number.parseFloat(text);
             return Number.isFinite(num) ? num : 0;
         }
 
-        function parseSpeed(value) {
-            if (value === null || value === undefined) return 0;
-            const text = value.toString().trim().replace(',', '.');
-            const num = Number.parseFloat(text);
-            return Number.isFinite(num) ? num : 0;
+        function formatNumber(value) {
+            const rounded = Math.round(value * 10) / 10;
+            return rounded % 1 === 0 ? rounded.toFixed(0) : rounded.toFixed(1);
         }
 
         function formatLength(value) {
@@ -127,121 +213,408 @@
             return rounded % 1 === 0 ? `${rounded.toFixed(0)} cm` : `${rounded.toFixed(1)} cm`;
         }
 
-        function formatSpeed(value) {
-            const rounded = Math.round(value * 10) / 10;
-            return rounded % 1 === 0 ? rounded.toFixed(0) : rounded.toFixed(1);
-        }
+        function updateTotals() {
+            const totalLength = state.items.reduce((sum, item) => sum + parseNumber(item.length), 0);
+            const totalAxles = state.items.reduce((sum, item) => sum + parseNumber(item.axles), 0);
+            if (lengthEl) lengthEl.textContent = formatLength(totalLength);
+            if (axlesEl) axlesEl.textContent = formatNumber(totalAxles);
 
-        function updateTotalLength() {
-            const total = state.items.reduce((sum, item) => sum + parseLength(item.length), 0);
-            if (lengthEl) lengthEl.textContent = formatLength(total);
-        }
-
-        function updateVmax() {
-            let base = Number.POSITIVE_INFINITY;
+            let baseVmax = Number.POSITIVE_INFINITY;
             for (const item of state.items) {
-                const speed = parseSpeed(item.vmax);
-                if (speed > 0 && speed < base) {
-                    base = speed;
+                const vmax = parseNumber(item.vmax);
+                if (vmax > 0 && vmax < baseVmax) {
+                    baseVmax = vmax;
                 }
             }
-            if (!Number.isFinite(base)) {
-                base = 0;
+            if (!Number.isFinite(baseVmax)) {
+                baseVmax = 0;
             }
-            if (state.vmaxOverride === null || state.vmaxOverride > base) {
-                state.vmaxOverride = base;
+            if (state.vmaxOverride === null || state.vmaxOverride > baseVmax) {
+                state.vmaxOverride = baseVmax;
             }
             if (vmaxInput) {
-                vmaxInput.max = base > 0 ? base.toString() : '';
-                vmaxInput.value = formatSpeed(state.vmaxOverride);
+                vmaxInput.max = baseVmax > 0 ? baseVmax.toString() : '';
+                vmaxInput.value = formatNumber(state.vmaxOverride ?? 0);
             }
             if (vmaxMaxEl) {
-                vmaxMaxEl.textContent = formatSpeed(base);
+                vmaxMaxEl.textContent = formatNumber(baseVmax);
             }
         }
 
         function renderList() {
             rowsBody.innerHTML = '';
-            for (const item of state.items) {
+            state.items.forEach((item, index) => {
                 const row = document.createElement('div');
                 row.className = 'otd-train-row';
                 row.innerHTML = `
                     <div class="otd-train-row-type">${item.type === 'loco' ? 'L' : 'W'}</div>
                     <div class="otd-train-row-name">${item.name ?? ''}</div>
-                    <div class="otd-train-row-length">${formatLength(parseLength(item.length))}</div>
+                    <div class="otd-train-row-length">${formatLength(parseNumber(item.length))}</div>
+                    <div class="otd-train-row-axles">${formatNumber(parseNumber(item.axles))}</div>
                     <button type="button" class="otd-train-row-remove" data-id="${item.id}">Entfernen</button>
+                    <div class="otd-train-row-pos">#${index + 1}</div>
                 `;
                 rowsBody.appendChild(row);
+            });
+            updateTotals();
+        }
+
+        function renderTrainList() {
+            listBody.innerHTML = '';
+            for (const train of state.trains) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${train.name ?? ''}</td>
+                    <td>${train.uid ?? ''}</td>
+                    <td>${train.length ?? ''}</td>
+                    <td>${train.axles ?? ''}</td>
+                    <td>${train.vmax ?? ''}</td>
+                    <td class="otd-train-actions-cell">
+                        <button type="button" data-id="${train.uid}" class="otd-train-row-edit">Bearbeiten</button>
+                        <button type="button" data-id="${train.uid}" class="otd-train-row-delete">Entfernen</button>
+                    </td>
+                `;
+                tr.dataset.id = train.uid ?? '';
+                listBody.appendChild(tr);
             }
-            updateTotalLength();
-            updateVmax();
+        }
+
+        function renderCatalogLists() {
+            if (locoCatalogEl) {
+                locoCatalogEl.innerHTML = '';
+                Object.values(state.vehicleCatalog.loco).forEach(item => {
+                    const entry = document.createElement('div');
+                    entry.className = 'otd-train-catalog-item';
+                    entry.textContent = item.name || item.uid;
+                    entry.draggable = true;
+                    entry.dataset.type = 'loco';
+                    entry.dataset.id = item.uid;
+                    entry.dataset.name = item.name ?? '';
+                    entry.dataset.length = item.length ?? '';
+                    entry.dataset.axles = item.axles ?? '';
+                    entry.dataset.vmax = item.vmax ?? '';
+                    locoCatalogEl.appendChild(entry);
+                });
+            }
+            if (railcarCatalogEl) {
+                railcarCatalogEl.innerHTML = '';
+                Object.values(state.vehicleCatalog.railcar).forEach(item => {
+                    const entry = document.createElement('div');
+                    entry.className = 'otd-train-catalog-item';
+                    entry.textContent = item.name || item.uid;
+                    entry.draggable = true;
+                    entry.dataset.type = 'railcar';
+                    entry.dataset.id = item.uid;
+                    entry.dataset.name = item.name ?? '';
+                    entry.dataset.length = item.length ?? '';
+                    entry.dataset.axles = item.axles ?? '';
+                    entry.dataset.vmax = item.vmax ?? '';
+                    railcarCatalogEl.appendChild(entry);
+                });
+            }
+        }
+
+        function getSelectedTrain() {
+            return state.trains.find(t => t.uid === state.selectedTrainId) || null;
         }
 
         function resetForm() {
+            uidInput.value = '';
             nameInput.value = '';
-            if (numberInput) {
-                numberInput.value = '';
-            }
-            if (categoryInput) {
-                categoryInput.value = '';
-            }
+            indexInput.value = '';
+            imageInput.value = '';
+            descriptionInput.value = '';
+            weightInput.value = '';
+            notesInput.value = '';
             state.items = [];
             state.vmaxOverride = null;
+            state.selectedTrainId = null;
+            renderList();
+        }
+        function fillForm(train) {
+            uidInput.value = train.uid ?? '';
+            nameInput.value = train.name ?? '';
+            indexInput.value = train.index ?? '';
+            imageInput.value = train.image ?? '';
+            descriptionInput.value = train.description ?? '';
+            weightInput.value = train.weight ?? '';
+            notesInput.value = train.notes ?? '';
+            state.items = (train.items || []).map(item => ({ ...item }));
+            state.vmaxOverride = train.vmax ? parseNumber(train.vmax) : null;
+            state.selectedTrainId = train.uid;
             renderList();
         }
 
         function addItem(payload) {
-            const lengthValue = parseLength(payload.length);
-            const lengthText = lengthValue.toString();
-            state.items.push({
-                id: crypto.randomUUID(),
+            const id = crypto.randomUUID();
+            const item = {
+                id,
                 type: payload.type,
+                f_uid: payload.id,
                 name: payload.name ?? '',
-                length: lengthText,
+                length: payload.length ?? '',
+                axles: payload.axles ?? '',
                 vmax: payload.vmax ?? ''
-            });
+            };
+            if ((!item.name || item.name === '') && payload.id) {
+                const catalog = payload.type === 'loco' ? state.vehicleCatalog.loco : state.vehicleCatalog.railcar;
+                const lookup = catalog[payload.id];
+                if (lookup) {
+                    item.name = lookup.name;
+                    item.length = item.length || lookup.length;
+                    item.axles = item.axles || lookup.axles;
+                    item.vmax = item.vmax || lookup.vmax;
+                }
+            }
+            state.items.push(item);
             renderList();
-            setStatus('Eintrag uebernommen');
+            setStatus('Fahrzeug hinzugefuegt');
+        }
+
+        async function loadCatalogs() {
+            try {
+                const [locoResp, railResp] = await Promise.all([
+                    fetch('/loco.xml', { cache: 'no-store' }),
+                    fetch('/railcar.xml', { cache: 'no-store' })
+                ]);
+                if (locoResp.ok) {
+                    const xml = await locoResp.text();
+                    const doc = new DOMParser().parseFromString(xml, 'application/xml');
+                    doc.querySelectorAll('locos > loco').forEach(node => {
+                        const uid = node.getAttribute('uid') ?? '';
+                        if (!uid) return;
+                        const modelNode = node.querySelector('model');
+                        state.vehicleCatalog.loco[uid] = {
+                            uid,
+                            name: node.getAttribute('name') ?? '',
+                            length: node.getAttribute('length') ?? '',
+                            axles: node.getAttribute('axles') ?? '',
+                            vmax: modelNode?.querySelector('vmax')?.textContent ?? ''
+                        };
+                    });
+                }
+                if (railResp.ok) {
+                    const xml = await railResp.text();
+                    const doc = new DOMParser().parseFromString(xml, 'application/xml');
+                    doc.querySelectorAll('railcars > railcar').forEach(node => {
+                        const uid = node.getAttribute('uid') ?? '';
+                        if (!uid) return;
+                        const modelNode = node.querySelector('model');
+                        state.vehicleCatalog.railcar[uid] = {
+                            uid,
+                            name: node.getAttribute('name') ?? '',
+                            length: node.getAttribute('length') ?? '',
+                            axles: node.getAttribute('axles') ?? '',
+                            vmax: modelNode?.querySelector('vmax')?.textContent ?? ''
+                        };
+                    });
+                }
+                renderCatalogLists();
+            } catch {
+                // ignore
+            }
+        }
+
+        function persistCurrentTrain() {
+            const train = getSelectedTrain();
+            if (!train) return;
+            train.uid = uidInput.value.trim() || train.uid;
+            train.name = nameInput.value.trim();
+            train.index = indexInput.value.trim();
+            train.image = imageInput.value.trim();
+            train.description = descriptionInput.value.trim();
+            train.weight = weightInput.value.trim();
+            train.notes = notesInput.value.trim();
+            train.items = state.items.map(item => ({ ...item }));
+            train.vmax = (state.vmaxOverride ?? 0).toString();
+            train.length = formatNumber(state.items.reduce((sum, item) => sum + parseNumber(item.length), 0));
+            train.axles = formatNumber(state.items.reduce((sum, item) => sum + parseNumber(item.axles), 0));
         }
 
         function createNewTrain() {
             persistCurrentTrain();
-            const id = crypto.randomUUID();
+            const uid = crypto.randomUUID();
             const train = {
-                id,
+                uid,
                 name: '',
-                number: '',
-                category: '',
-                items: [],
-                vmax: null
+                index: '',
+                image: '',
+                description: '',
+                weight: '',
+                notes: '',
+                vmax: '',
+                length: '',
+                axles: '',
+                items: []
             };
             state.trains.push(train);
-            state.selectedTrainId = id;
             resetForm();
+            uidInput.value = uid;
+            state.selectedTrainId = uid;
             renderTrainList();
             setStatus('Neuer Zug erstellt');
         }
 
-        function selectTrain(id) {
+        function selectTrain(uid) {
             persistCurrentTrain();
-            const train = state.trains.find(t => t.id === id);
+            const train = state.trains.find(t => t.uid === uid);
             if (!train) return;
-            state.selectedTrainId = train.id;
-            nameInput.value = train.name ?? '';
-            if (numberInput) {
-                numberInput.value = train.number ?? '';
-            }
-            if (categoryInput) {
-                categoryInput.value = train.category ?? '';
-            }
-            state.items = (train.items || []).map(item => ({ ...item }));
-            state.vmaxOverride = train.vmax ?? null;
-            renderList();
+            fillForm(train);
             renderTrainList();
             setStatus('Zug geladen');
         }
 
-        function handleDrop(event) {
+        function getCurrentVmax() {
+            const base = parseNumber(vmaxMaxEl?.textContent ?? '0');
+            let value = state.vmaxOverride ?? base;
+            if (base > 0 && value > base) {
+                value = base;
+            }
+            return value;
+        }
+
+        async function loadFromServer() {
+            try {
+                setStatus('Laden ...');
+                await loadCatalogs();
+                const resp = await fetch('/train.xml', { cache: 'no-store' });
+                if (!resp.ok) {
+                    state.trains = [];
+                    state.selectedTrainId = null;
+                    resetForm();
+                    renderTrainList();
+                    setStatus('Keine train.xml gefunden - neue Datei anlegen');
+                    state.loadedOnce = true;
+                    return;
+                }
+                const xml = await resp.text();
+                const doc = new DOMParser().parseFromString(xml, 'application/xml');
+                const trains = [];
+                doc.querySelectorAll('trains > train').forEach(node => {
+                    const vehicles = [];
+                    node.querySelectorAll('vehicles > loco, vehicles > railcar').forEach(vehicle => {
+                        const type = vehicle.tagName.toLowerCase();
+                        const fUid = vehicle.getAttribute('f_uid') ?? '';
+                        const position = parseNumber(vehicle.getAttribute('position')) || 0;
+                        const catalog = type === 'loco' ? state.vehicleCatalog.loco : state.vehicleCatalog.railcar;
+                        const lookup = catalog[fUid] || {};
+                        vehicles.push({
+                            id: crypto.randomUUID(),
+                            type,
+                            f_uid: fUid,
+                            name: lookup.name ?? '',
+                            length: lookup.length ?? '',
+                            axles: lookup.axles ?? '',
+                            vmax: lookup.vmax ?? '',
+                            position
+                        });
+                    });
+                    vehicles.sort((a, b) => (a.position || 0) - (b.position || 0));
+                    trains.push({
+                        uid: node.getAttribute('uid') ?? crypto.randomUUID(),
+                        name: node.getAttribute('name') ?? '',
+                        length: node.getAttribute('length') ?? '',
+                        axles: node.getAttribute('axles') ?? '',
+                        index: node.getAttribute('index') ?? '',
+                        description: node.querySelector('description')?.textContent ?? '',
+                        weight: node.querySelector('weight')?.textContent ?? '',
+                        vmax: node.querySelector('vmax')?.textContent ?? '',
+                        image: node.querySelector('image')?.textContent ?? '',
+                        notes: node.querySelector('notes')?.textContent ?? '',
+                        items: vehicles
+                    });
+                });
+                state.trains = trains;
+                state.selectedTrainId = trains[0]?.uid ?? null;
+                if (state.selectedTrainId) {
+                    const selected = state.trains.find(t => t.uid === state.selectedTrainId);
+                    if (selected) fillForm(selected);
+                } else {
+                    resetForm();
+                }
+                renderTrainList();
+                setStatus(`Geladen (${state.trains.length} Zuege)`);
+                state.loadedOnce = true;
+            } catch {
+                setStatus('Laden fehlgeschlagen');
+            }
+        }
+
+        async function saveToServer() {
+            try {
+                setStatus('Speichere ...');
+                if (!state.selectedTrainId) {
+                    createNewTrain();
+                }
+                const payload = {
+                    uid: uidInput.value.trim() || state.selectedTrainId,
+                    name: nameInput.value.trim(),
+                    index: indexInput.value.trim(),
+                    image: imageInput.value.trim(),
+                    description: descriptionInput.value.trim(),
+                    weight: weightInput.value.trim(),
+                    vmax: getCurrentVmax().toString(),
+                    notes: notesInput.value.trim(),
+                    items: state.items.map((item, idx) => ({
+                        type: item.type,
+                        f_uid: item.f_uid,
+                        position: idx + 1,
+                        length: item.length ?? '',
+                        axles: item.axles ?? '',
+                        vmax: item.vmax ?? ''
+                    }))
+                };
+                const resp = await fetch('/train/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                persistCurrentTrain();
+                renderTrainList();
+                setStatus('Gespeichert');
+            } catch {
+                setStatus('Speichern fehlgeschlagen');
+            }
+        }
+        async function deleteSelected() {
+            if (!state.selectedTrainId) {
+                setStatus('Kein Zug ausgewaehlt');
+                return;
+            }
+            const deleteId = state.selectedTrainId;
+            state.trains = state.trains.filter(t => t.uid !== deleteId);
+            state.selectedTrainId = state.trains[0]?.uid ?? null;
+            if (state.selectedTrainId) {
+                const selected = state.trains.find(t => t.uid === state.selectedTrainId);
+                if (selected) fillForm(selected);
+            } else {
+                resetForm();
+            }
+            renderTrainList();
+            try {
+                const resp = await fetch('/train/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: deleteId })
+                });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                setStatus('Zug geloescht');
+            } catch {
+                setStatus('Loeschen fehlgeschlagen');
+            }
+        }
+
+        dropzone?.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropzone.classList.add('is-dragover');
+        });
+
+        dropzone?.addEventListener('dragleave', () => {
+            dropzone.classList.remove('is-dragover');
+        });
+
+        dropzone?.addEventListener('drop', (event) => {
             event.preventDefault();
             dropzone.classList.remove('is-dragover');
             const raw = event.dataTransfer?.getData('application/json');
@@ -254,236 +627,83 @@
             }
             if (!payload || (payload.type !== 'loco' && payload.type !== 'railcar')) return;
             addItem(payload);
-        }
-
-        dropzone.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            dropzone.classList.add('is-dragover');
         });
 
-        dropzone.addEventListener('dragleave', () => {
-            dropzone.classList.remove('is-dragover');
-        });
-
-        dropzone.addEventListener('drop', handleDrop);
-
-        rowsBody.addEventListener('click', (event) => {
+        rowsBody?.addEventListener('click', (event) => {
             const removeBtn = event.target.closest('.otd-train-row-remove');
             if (!removeBtn) return;
-            state.items = state.items.filter(i => i.id !== removeBtn.dataset.id);
+            state.items = state.items.filter(item => item.id !== removeBtn.dataset.id);
             renderList();
             setStatus('Entfernt');
         });
 
-        trainList?.addEventListener('click', (event) => {
-            const btn = event.target.closest('.otd-train-overview-item');
-            if (!btn) return;
-            selectTrain(btn.dataset.id);
+        listBody?.addEventListener('click', (event) => {
+            const editBtn = event.target.closest('.otd-train-row-edit');
+            const delBtn = event.target.closest('.otd-train-row-delete');
+            if (editBtn) {
+                selectTrain(editBtn.dataset.id);
+            } else if (delBtn) {
+                state.selectedTrainId = delBtn.dataset.id;
+                deleteSelected();
+            }
         });
 
-        nameInput?.addEventListener('input', () => {
-            const train = getSelectedTrain();
-            if (!train) return;
-            train.name = nameInput.value.trim();
-            renderTrainList();
-        });
+        function handleCatalogDragStart(event) {
+            const entry = event.target.closest('.otd-train-catalog-item');
+            if (!entry) return;
+            const payload = {
+                type: entry.dataset.type,
+                id: entry.dataset.id,
+                name: entry.dataset.name,
+                length: entry.dataset.length,
+                axles: entry.dataset.axles,
+                vmax: entry.dataset.vmax
+            };
+            event.dataTransfer?.setData('application/json', JSON.stringify(payload));
+            event.dataTransfer?.setDragImage(entry, 16, 16);
+        }
 
-        numberInput?.addEventListener('input', () => {
-            const train = getSelectedTrain();
-            if (!train) return;
-            train.number = numberInput.value.trim();
-        });
-
-        categoryInput?.addEventListener('input', () => {
-            const train = getSelectedTrain();
-            if (!train) return;
-            train.category = categoryInput.value.trim();
-        });
+        locoCatalogEl?.addEventListener('dragstart', handleCatalogDragStart);
+        railcarCatalogEl?.addEventListener('dragstart', handleCatalogDragStart);
 
         vmaxInput?.addEventListener('input', () => {
-            const base = parseSpeed(vmaxMaxEl?.textContent ?? '0');
-            let value = parseSpeed(vmaxInput.value);
+            const base = parseNumber(vmaxMaxEl?.textContent ?? '0');
+            let value = parseNumber(vmaxInput.value);
             if (base > 0 && value > base) {
                 value = base;
             }
             if (value < 0) value = 0;
             state.vmaxOverride = value;
-            if (vmaxInput) {
-                vmaxInput.value = formatSpeed(value);
-            }
+            vmaxInput.value = formatNumber(value);
         });
 
-        function getCurrentVmax() {
-            const base = parseSpeed(vmaxMaxEl?.textContent ?? '0');
-            let value = state.vmaxOverride ?? base;
-            if (base > 0 && value > base) {
-                value = base;
-            }
-            return value;
-        }
-
-        function persistCurrentTrain() {
-            const train = getSelectedTrain();
-            if (!train) return;
-            train.name = nameInput.value.trim();
-            train.number = numberInput?.value.trim() ?? '';
-            train.category = categoryInput?.value.trim() ?? '';
-            train.items = state.items.map(item => ({ ...item }));
-            train.vmax = getCurrentVmax();
-        }
-
-        async function deleteSelectedTrain() {
-            if (!state.selectedTrainId) {
-                setStatus('Kein Zug ausgewaehlt');
-                return;
-            }
-            const deleteId = state.selectedTrainId;
-            state.trains = state.trains.filter(t => t.id !== deleteId);
-            const nextId = state.trains.length > 0 ? state.trains[0].id : null;
-            state.selectedTrainId = null;
-            if (nextId) {
-                selectTrain(nextId);
-            } else {
-                resetForm();
-                renderTrainList();
-            }
-            try {
-                const resp = await fetch('/train/delete', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: deleteId })
-                });
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                setStatus('Zug geloescht');
-            } catch (err) {
-                setStatus('Loeschen fehlgeschlagen');
-            }
-        }
-
-        async function saveToServer() {
-            try {
-                setStatus('Speichere ...');
-                if (!state.selectedTrainId) {
-                    createNewTrain();
-                }
-                const train = getSelectedTrain();
-                if (train) {
-                    train.name = nameInput.value.trim();
-                    train.number = numberInput?.value.trim() ?? '';
-                    train.category = categoryInput?.value.trim() ?? '';
-                    train.items = state.items.map(item => ({ ...item }));
-                    train.vmax = getCurrentVmax();
-                }
-                const payload = {
-                    id: state.selectedTrainId,
-                    name: nameInput.value.trim(),
-                    number: numberInput?.value.trim() ?? '',
-                    category: categoryInput?.value.trim() ?? '',
-                    vmax: getCurrentVmax().toString(),
-                    items: state.items
-                };
-                const resp = await fetch('/train/save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                setStatus(`Gespeichert (${state.items.length} Eintraege)`);
-                renderTrainList();
-            } catch (err) {
-                setStatus('Speichern fehlgeschlagen');
-            }
-        }
-
-        async function loadFromServer() {
-            try {
-                setStatus('Laden ...');
-                const resp = await fetch('/train.xml', { cache: 'no-store' });
-                if (!resp.ok) {
-                    setStatus('Keine train.xml gefunden - neue Datei anlegen');
-                    state.trains = [];
-                    state.selectedTrainId = null;
-                    resetForm();
-                    renderTrainList();
-                    state.loadedOnce = true;
-                    return;
-                }
-                const xml = await resp.text();
-                const doc = new DOMParser().parseFromString(xml, 'application/xml');
-                const trains = [];
-                const nodes = doc.querySelectorAll('trains > train');
-                const trainNodes = nodes.length > 0 ? nodes : doc.querySelectorAll('train');
-                trainNodes.forEach(node => {
-                    const cars = [];
-                    node.querySelectorAll('cars > car').forEach(carNode => {
-                        cars.push({
-                            id: carNode.getAttribute('id') || crypto.randomUUID(),
-                            type: carNode.getAttribute('type') || 'railcar',
-                            name: carNode.querySelector('name')?.textContent ?? '',
-                            length: carNode.getAttribute('length') || '0',
-                            vmax: carNode.getAttribute('vmax') || ''
-                        });
-                    });
-                    trains.push({
-                        id: node.getAttribute('id') || crypto.randomUUID(),
-                        name: node.querySelector('name')?.textContent ?? '',
-                        number: node.querySelector('number')?.textContent ?? '',
-                        category: node.querySelector('category')?.textContent ?? '',
-                        vmax: node.querySelector('vmax')?.textContent ? parseSpeed(node.querySelector('vmax')?.textContent ?? '') : null,
-                        items: cars
-                    });
-                });
-                state.trains = trains;
-                if (state.selectedTrainId && !state.trains.find(t => t.id === state.selectedTrainId)) {
-                    state.selectedTrainId = null;
-                }
-                if (!state.selectedTrainId && state.trains.length > 0) {
-                    state.selectedTrainId = state.trains[0].id;
-                }
-                if (state.selectedTrainId) {
-                    const selected = state.trains.find(t => t.id === state.selectedTrainId) || state.trains[0];
-                    if (selected) {
-                        state.selectedTrainId = selected.id;
-                        nameInput.value = selected.name ?? '';
-                        if (numberInput) {
-                            numberInput.value = selected.number ?? '';
-                        }
-                        if (categoryInput) {
-                            categoryInput.value = selected.category ?? '';
-                        }
-                        state.items = selected.items.map(item => ({ ...item }));
-                        state.vmaxOverride = selected.vmax ?? null;
-                    }
-                } else {
-                    resetForm();
-                }
-                renderList();
-                renderTrainList();
-                setStatus(`Geladen (${state.trains.length} Zuege)`);
-                state.loadedOnce = true;
-                return;
-            } catch (err) {
-                setStatus('Laden fehlgeschlagen');
-            }
-        }
-
-        newBtn?.addEventListener('click', createNewTrain);
-        deleteBtn?.addEventListener('click', deleteSelectedTrain);
-        saveBtn?.addEventListener('click', saveToServer);
-        loadBtn?.addEventListener('click', loadFromServer);
         clearBtn?.addEventListener('click', () => {
             state.items = [];
             renderList();
             setStatus('Liste geleert');
         });
 
+        newBtn?.addEventListener('click', createNewTrain);
+        saveBtn?.addEventListener('click', saveToServer);
+        deleteBtn?.addEventListener('click', deleteSelected);
+        loadBtn?.addEventListener('click', loadFromServer);
+        reloadBtn?.addEventListener('click', loadFromServer);
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabKey = btn.dataset.tab;
+                if (tabKey) setActiveTab(tabKey);
+            });
+        });
+
         window.openTrainFenster = function () {
             panel.classList.remove('otd-hidden');
+            setActiveTab('general');
             if (!panel.style.left || !panel.style.top) {
                 const workspace = document.querySelector('.otd-workspace');
                 const rect = workspace?.getBoundingClientRect();
-                const width = panel.offsetWidth || 720;
-                const height = panel.offsetHeight || 360;
+                const width = panel.offsetWidth || 980;
+                const height = panel.offsetHeight || 720;
                 const left = rect ? Math.max(12, (rect.width - width) / 2) : 12;
                 const top = rect ? Math.max(12, (rect.height - height) / 2) : 12;
                 panel.style.left = `${left}px`;

@@ -483,25 +483,91 @@ app.MapGet("/loco.xml", () =>
 });
 
 // Lokomotiven speichern
-app.MapPost("/loco/save", async (List<LokoDto> locos) =>
+app.MapPost("/loco/save", async (List<LocoDto> locos) =>
 {
     var path = Path.Combine(app.Environment.ContentRootPath, "loco.xml");
     var doc = new XDocument(
+        new XDeclaration("1.0", "utf-8", null),
+        new XComment(" Definition of Locomotives "),
         new XElement("locos",
-            locos.Select(l => new XElement("loco",
-                new XAttribute("id", string.IsNullOrWhiteSpace(l.Id) ? Guid.NewGuid().ToString() : l.Id),
-                new XElement("name", l.Name ?? string.Empty),
-                new XElement("address", l.address ?? string.Empty),
-                new XElement("length", l.Length ?? string.Empty),
-                new XElement("vmax", l.VMax ?? string.Empty),
-                new XElement("vmin", l.VMin ?? string.Empty),
-                new XElement("notes", l.Notes ?? string.Empty)
-            ))
+            (locos ?? new List<LocoDto>()).Select(l =>
+            {
+                var uid = string.IsNullOrWhiteSpace(l.Uid) ? Guid.NewGuid().ToString() : l.Uid;
+                var loco = new XElement("loco",
+                    new XAttribute("uid", uid),
+                    new XAttribute("name", l.Name ?? string.Empty),
+                    new XAttribute("length", l.Length ?? string.Empty),
+                    new XAttribute("axles", l.Axles ?? string.Empty),
+                    new XAttribute("index", l.Index ?? string.Empty)
+                );
+
+                var model = l.Model ?? new LocoModelDto(null, null, null, null, null, null, null, null, null, null, null, null);
+                loco.Add(new XElement("model",
+                    new XAttribute("manufacturer", model.Manufacturer ?? string.Empty),
+                    new XAttribute("scale", model.Scale ?? string.Empty),
+                    new XAttribute("catalognumber", model.CatalogNumber ?? string.Empty),
+                    new XElement("description", model.Description ?? string.Empty),
+                    new XElement("operator", model.Operator ?? string.Empty),
+                    new XElement("class", model.ClassName ?? string.Empty),
+                    new XElement("fleetnumber", model.FleetNumber ?? string.Empty),
+                    new XElement("tractiontype", model.TractionType ?? string.Empty),
+                    new XElement("weight", model.Weight ?? string.Empty),
+                    new XElement("vmax", model.VMax ?? string.Empty),
+                    new XElement("icon", model.Icon ?? string.Empty),
+                    new XElement("notes", model.Notes ?? string.Empty)
+                ));
+
+                var decoder = l.Decoder ?? new LocoDecoderDto(null, null, null, null, null);
+                loco.Add(new XElement("decoder",
+                    new XElement("protocol", decoder.Protocol ?? string.Empty),
+                    new XElement("address", decoder.Address ?? string.Empty),
+                    new XElement("addresstype", decoder.AddressType ?? string.Empty),
+                    new XElement("functiontable",
+                        (decoder.Functions ?? new List<LocoFunctionDto>()).Select(fn =>
+                            new XElement("function",
+                                new XAttribute("no", fn.No ?? string.Empty),
+                                new XAttribute("description", fn.Description ?? string.Empty),
+                                new XAttribute("actuation", fn.Actuation ?? string.Empty),
+                                new XAttribute("type", fn.Type ?? string.Empty),
+                                new XAttribute("category", fn.Category ?? string.Empty),
+                                new XAttribute("visible", fn.Visible ?? string.Empty),
+                                new XAttribute("image", fn.Image ?? string.Empty)
+                            ))
+                    ),
+                    new XElement("speedtable",
+                        (decoder.Speeds ?? new List<LocoSpeedDto>()).Select(speed =>
+                            new XElement("speed",
+                                new XAttribute("step", speed.Step ?? string.Empty),
+                                new XAttribute("v", speed.V ?? string.Empty)
+                            ))
+                    )
+                ));
+
+                var operation = l.Operation ?? new LocoOperationDto(null, null, null, null, null, null, null);
+                loco.Add(new XElement("operation",
+                    new XElement("purchasedate", operation.PurchaseDate ?? string.Empty),
+                    new XElement("operatingtime_total", operation.OperatingTimeTotal ?? string.Empty),
+                    new XElement("operatingtime_service", operation.OperatingTimeService ?? string.Empty),
+                    new XElement("traveldistance", operation.TravelDistance ?? string.Empty),
+                    new XElement("serviceinterval", operation.ServiceInterval ?? string.Empty),
+                    new XElement("refuleinterval", operation.RefuelInterval ?? string.Empty),
+                    new XElement("servicetable",
+                        (operation.ServiceIssues ?? new List<LocoServiceIssueDto>()).Select(issue =>
+                            new XElement("issue",
+                                new XAttribute("date", issue.Date ?? string.Empty),
+                                new XAttribute("type", issue.Type ?? string.Empty),
+                                (issue.Items ?? new List<string>()).Select(item => new XElement("item", item ?? string.Empty))
+                            ))
+                    )
+                ));
+
+                return loco;
+            })
         )
     );
     await using var stream = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
     await doc.SaveAsync(stream, SaveOptions.None, default);
-    return Results.Ok(new { saved = locos.Count });
+    return Results.Ok(new { saved = locos?.Count ?? 0 });
 });
 
 // Waggon lesen
@@ -516,23 +582,83 @@ app.MapGet("/railcar.xml", () =>
 });
 
 // Waggon speichern
-app.MapPost("/railcar/save", async (List<WaggonDto> railcars) =>
+app.MapPost("/railcar/save", async (List<RailcarDto> railcars) =>
 {
     var path = Path.Combine(app.Environment.ContentRootPath, "railcar.xml");
     var doc = new XDocument(
+        new XDeclaration("1.0", "utf-8", null),
+        new XComment(" Definition of Rail Cars (Coaches, Waggons etc.) "),
         new XElement("railcars",
-            railcars.Select(w => new XElement("railcar",
-                new XAttribute("id", string.IsNullOrWhiteSpace(w.Id) ? Guid.NewGuid().ToString() : w.Id),
-                new XElement("name", w.Name ?? string.Empty),
-                new XElement("length", w.Length ?? string.Empty),
-                new XElement("vmax", w.VMax ?? string.Empty),
-                new XElement("notes", w.Notes ?? string.Empty)
-            ))
+            (railcars ?? new List<RailcarDto>()).Select(w =>
+            {
+                var uid = string.IsNullOrWhiteSpace(w.Uid) ? Guid.NewGuid().ToString() : w.Uid;
+                var railcar = new XElement("railcar",
+                    new XAttribute("uid", uid),
+                    new XAttribute("name", w.Name ?? string.Empty),
+                    new XAttribute("length", w.Length ?? string.Empty),
+                    new XAttribute("axles", w.Axles ?? string.Empty),
+                    new XAttribute("index", w.Index ?? string.Empty)
+                );
+
+                var model = w.Model ?? new RailcarModelDto(null, null, null, null, null, null, null, null, null, null, null, null, null);
+                railcar.Add(new XElement("model",
+                    new XAttribute("manufacturer", model.Manufacturer ?? string.Empty),
+                    new XAttribute("scale", model.Scale ?? string.Empty),
+                    new XAttribute("catalognumber", model.CatalogNumber ?? string.Empty),
+                    new XElement("description", model.Description ?? string.Empty),
+                    new XElement("operator", model.Operator ?? string.Empty),
+                    new XElement("class", model.ClassName ?? string.Empty),
+                    new XElement("fleetnumber", model.FleetNumber ?? string.Empty),
+                    new XElement("cartype", model.CarType ?? string.Empty),
+                    new XElement("weight_empty", model.WeightEmpty ?? string.Empty),
+                    new XElement("weight_full", model.WeightFull ?? string.Empty),
+                    new XElement("vmax", model.VMax ?? string.Empty),
+                    new XElement("image", model.Image ?? string.Empty),
+                    new XElement("notes", model.Notes ?? string.Empty)
+                ));
+
+                var decoder = w.Decoder ?? new RailcarDecoderDto(null, null, null, null);
+                railcar.Add(new XElement("decoder",
+                    new XElement("protocol", decoder.Protocol ?? string.Empty),
+                    new XElement("address", decoder.Address ?? string.Empty),
+                    new XElement("addresstype", decoder.AddressType ?? string.Empty),
+                    new XElement("functiontable",
+                        (decoder.Functions ?? new List<RailcarFunctionDto>()).Select(fn =>
+                            new XElement("function",
+                                new XAttribute("no", fn.No ?? string.Empty),
+                                new XAttribute("description", fn.Description ?? string.Empty),
+                                new XAttribute("actuation", fn.Actuation ?? string.Empty),
+                                new XAttribute("type", fn.Type ?? string.Empty),
+                                new XAttribute("category", fn.Category ?? string.Empty),
+                                new XAttribute("visible", fn.Visible ?? string.Empty),
+                                new XAttribute("image", fn.Image ?? string.Empty)
+                            ))
+                    )
+                ));
+
+                var operation = w.Operation ?? new RailcarOperationDto(null, null, null, null, null);
+                railcar.Add(new XElement("operation",
+                    new XElement("purchasedate", operation.PurchaseDate ?? string.Empty),
+                    new XElement("operatingtime", operation.OperatingTime ?? string.Empty),
+                    new XElement("traveldistance", operation.TravelDistance ?? string.Empty),
+                    new XElement("serviceinterval", operation.ServiceInterval ?? string.Empty),
+                    new XElement("servicetable",
+                        (operation.ServiceIssues ?? new List<RailcarServiceIssueDto>()).Select(issue =>
+                            new XElement("issue",
+                                new XAttribute("date", issue.Date ?? string.Empty),
+                                new XAttribute("type", issue.Type ?? string.Empty),
+                                (issue.Items ?? new List<string>()).Select(item => new XElement("item", item ?? string.Empty))
+                            ))
+                    )
+                ));
+
+                return railcar;
+            })
         )
     );
     await using var stream = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
     await doc.SaveAsync(stream, SaveOptions.None, default);
-    return Results.Ok(new { saved = railcars.Count });
+    return Results.Ok(new { saved = railcars?.Count ?? 0 });
 });
 
 // Zug lesen
@@ -547,14 +673,14 @@ app.MapGet("/train.xml", () =>
 });
 
 // Zug speichern
-app.MapPost("/train/save", async (TrainSaveDto train, HttpContext context) =>
+app.MapPost("/train/save", async (TrainDto train, HttpContext context) =>
 {
     if (IsUsersEnabled(app.Environment) && !IsAdminUser(context))
     {
         return Results.Forbid();
     }
     var path = Path.Combine(app.Environment.ContentRootPath, "train.xml");
-    var items = train.Items ?? new List<TrainItemDto>();
+    var items = train.Items ?? new List<TrainVehicleDto>();
     double ParseNumber(string? text)
     {
         if (double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
@@ -563,10 +689,9 @@ app.MapPost("/train/save", async (TrainSaveDto train, HttpContext context) =>
         }
         return 0.0;
     }
-    var totalLength = items.Sum(item =>
-    {
-        return ParseNumber(item.Length);
-    });
+
+    var totalLength = items.Sum(item => ParseNumber(item.Length));
+    var totalAxles = items.Sum(item => ParseNumber(item.Axles));
     var minVmax = items
         .Select(item => ParseNumber(item.VMax))
         .Where(value => value > 0)
@@ -582,22 +707,25 @@ app.MapPost("/train/save", async (TrainSaveDto train, HttpContext context) =>
     {
         finalVmax = Math.Min(requestedVmax, minVmax);
     }
-    var trainId = string.IsNullOrWhiteSpace(train.Id) ? Guid.NewGuid().ToString() : train.Id;
+
+    var trainId = string.IsNullOrWhiteSpace(train.Uid) ? Guid.NewGuid().ToString() : train.Uid;
     var trainElement = new XElement("train",
-        new XAttribute("id", trainId),
-        new XElement("name", train.Name ?? string.Empty),
-        new XElement("number", train.Number ?? string.Empty),
-        new XElement("category", train.Category ?? string.Empty),
-        new XElement("length", totalLength.ToString(CultureInfo.InvariantCulture)),
+        new XAttribute("uid", trainId),
+        new XAttribute("name", train.Name ?? string.Empty),
+        new XAttribute("length", totalLength.ToString(CultureInfo.InvariantCulture)),
+        new XAttribute("axles", totalAxles.ToString(CultureInfo.InvariantCulture)),
+        new XAttribute("index", train.Index ?? string.Empty),
+        new XElement("description", train.Description ?? string.Empty),
+        new XElement("weight", train.Weight ?? string.Empty),
         new XElement("vmax", finalVmax.ToString(CultureInfo.InvariantCulture)),
-        new XElement("cars",
-            items.Select(item => new XElement("car",
-                new XAttribute("id", string.IsNullOrWhiteSpace(item.Id) ? Guid.NewGuid().ToString() : item.Id),
-                new XAttribute("type", item.Type ?? string.Empty),
-                new XAttribute("length", item.Length ?? string.Empty),
-                new XAttribute("vmax", item.VMax ?? string.Empty),
-                new XElement("name", item.Name ?? string.Empty)
-            ))
+        new XElement("image", train.Image ?? string.Empty),
+        new XElement("notes", train.Notes ?? string.Empty),
+        new XElement("vehicles",
+            items.Select((item, idx) =>
+                new XElement(item.Type == "loco" ? "loco" : "railcar",
+                    new XAttribute("f_uid", item.FUid ?? string.Empty),
+                    new XAttribute("position", (item.Position > 0 ? item.Position : idx + 1).ToString(CultureInfo.InvariantCulture))
+                ))
         )
     );
 
@@ -611,16 +739,7 @@ app.MapPost("/train/save", async (TrainSaveDto train, HttpContext context) =>
             root = doc.Root ?? new XElement("trains");
             if (root.Name != "trains")
             {
-                var existingTrain = root.Name == "train" ? root : null;
                 root = new XElement("trains");
-                if (existingTrain != null)
-                {
-                    if (existingTrain.Attribute("id") == null)
-                    {
-                        existingTrain.SetAttributeValue("id", Guid.NewGuid().ToString());
-                    }
-                    root.Add(existingTrain);
-                }
                 doc = new XDocument(root);
             }
         }
@@ -637,7 +756,7 @@ app.MapPost("/train/save", async (TrainSaveDto train, HttpContext context) =>
     }
 
     var existing = root.Elements("train")
-        .FirstOrDefault(e => string.Equals((string?)e.Attribute("id"), trainId, StringComparison.OrdinalIgnoreCase));
+        .FirstOrDefault(e => string.Equals((string?)e.Attribute("uid"), trainId, StringComparison.OrdinalIgnoreCase));
     if (existing != null)
     {
         existing.ReplaceWith(trainElement);
@@ -646,9 +765,14 @@ app.MapPost("/train/save", async (TrainSaveDto train, HttpContext context) =>
     {
         root.Add(trainElement);
     }
+    doc.Declaration = new XDeclaration("1.0", "utf-8", null);
+    if (doc.Nodes().All(node => node.NodeType != System.Xml.XmlNodeType.Comment))
+    {
+        doc.AddFirst(new XComment(" Definition of Trains "));
+    }
     await using var stream = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None);
     await doc.SaveAsync(stream, SaveOptions.None, default);
-    return Results.Ok(new { saved = items.Count, length = totalLength, vmax = finalVmax });
+    return Results.Ok(new { saved = items.Count, length = totalLength, vmax = finalVmax, axles = totalAxles });
 });
 
 // Bahnhoefe lesen
@@ -714,25 +838,16 @@ app.MapPost("/train/delete", async (TrainDeleteDto request, HttpContext context)
     {
         return Results.NotFound();
     }
-    var id = request.Id ?? string.Empty;
+    var id = request.Id ?? request.Uid ?? string.Empty;
     bool removed = false;
 
     if (root.Name == "trains")
     {
         var target = root.Elements("train")
-            .FirstOrDefault(e => string.Equals((string?)e.Attribute("id"), id, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefault(e => string.Equals((string?)e.Attribute("uid"), id, StringComparison.OrdinalIgnoreCase));
         if (target != null)
         {
             target.Remove();
-            removed = true;
-        }
-    }
-    else if (root.Name == "train")
-    {
-        var rootId = (string?)root.Attribute("id");
-        if (string.IsNullOrWhiteSpace(id) || string.Equals(rootId, id, StringComparison.OrdinalIgnoreCase))
-        {
-            doc = new XDocument(new XElement("trains"));
             removed = true;
         }
     }
@@ -896,11 +1011,22 @@ if (autoOpen)
 
 app.Run();
 
-public record LokoDto(string? Id, string? Name, string? address, string? Length, string? VMax, string? VMin, string? Notes);
-public record WaggonDto(string? Id, string? Name, string? Length, string? VMax, string? Notes);
-public record TrainItemDto(string? Id, string? Type, string? Name, string? Length, string? VMax);
-public record TrainSaveDto(string? Id, string? Name, string? Number, string? Category, string? VMax, List<TrainItemDto>? Items);
-public record TrainDeleteDto(string? Id);
+public record LocoFunctionDto(string? No, string? Description, string? Actuation, string? Type, string? Category, string? Visible, string? Image);
+public record LocoSpeedDto(string? Step, string? V);
+public record LocoModelDto(string? Manufacturer, string? Scale, string? CatalogNumber, string? Description, string? Operator, string? ClassName, string? FleetNumber, string? TractionType, string? Weight, string? VMax, string? Icon, string? Notes);
+public record LocoDecoderDto(string? Protocol, string? Address, string? AddressType, List<LocoFunctionDto>? Functions, List<LocoSpeedDto>? Speeds);
+public record LocoServiceIssueDto(string? Date, string? Type, List<string>? Items);
+public record LocoOperationDto(string? PurchaseDate, string? OperatingTimeTotal, string? OperatingTimeService, string? TravelDistance, string? ServiceInterval, string? RefuelInterval, List<LocoServiceIssueDto>? ServiceIssues);
+public record LocoDto(string? Uid, string? Name, string? Length, string? Axles, string? Index, LocoModelDto? Model, LocoDecoderDto? Decoder, LocoOperationDto? Operation);
+public record RailcarFunctionDto(string? No, string? Description, string? Actuation, string? Type, string? Category, string? Visible, string? Image);
+public record RailcarModelDto(string? Manufacturer, string? Scale, string? CatalogNumber, string? Description, string? Operator, string? ClassName, string? FleetNumber, string? CarType, string? WeightEmpty, string? WeightFull, string? VMax, string? Image, string? Notes);
+public record RailcarDecoderDto(string? Protocol, string? Address, string? AddressType, List<RailcarFunctionDto>? Functions);
+public record RailcarServiceIssueDto(string? Date, string? Type, List<string>? Items);
+public record RailcarOperationDto(string? PurchaseDate, string? OperatingTime, string? TravelDistance, string? ServiceInterval, List<RailcarServiceIssueDto>? ServiceIssues);
+public record RailcarDto(string? Uid, string? Name, string? Length, string? Axles, string? Index, RailcarModelDto? Model, RailcarDecoderDto? Decoder, RailcarOperationDto? Operation);
+public record TrainVehicleDto(string? Type, string? FUid, int Position, string? Length, string? Axles, string? VMax);
+public record TrainDto(string? Uid, string? Name, string? Index, string? Image, string? Description, string? Weight, string? VMax, string? Notes, List<TrainVehicleDto>? Items);
+public record TrainDeleteDto(string? Id, string? Uid);
 public record StationDto(string? Id, string? Name, string? Code, string? Abbr, string? Type, string? Region, string? Notes);
 public record SignalElementDto(string? Id, string? Address, string? Aspects, string? Asb, string? Notes);
 public record PlanConfigFieldDto(string? Key, string? Value);

@@ -1,3 +1,4 @@
+
 <div class="otd-loco-window otd-hidden" id="otd-loco" role="dialog" aria-label="Lokomotiven">
     <div class="otd-loco-titlebar" data-drag-handle="true">
         <span class="otd-loco-title">Lokomotiven</span>
@@ -8,31 +9,263 @@
     </div>
     <div class="otd-loco-body">
         <div class="otd-loco-form">
-            <label>
-                Name
-                <input type="text" id="loco-name" maxlength="10" />
-            </label>
-            <label>
-                Address
-                <input type="number" id="loco-address" min="1" max="1024" />
+            <div class="otd-loco-tabs" role="tablist" aria-label="Lokeditor Bereiche">
+                <button type="button" class="otd-loco-tab" data-tab="overview">Uebersicht</button>
+                <button type="button" class="otd-loco-tab is-active" data-tab="general">Allgemein</button>
+                <button type="button" class="otd-loco-tab" data-tab="interface">Schnittstelle</button>
+                <button type="button" class="otd-loco-tab" data-tab="speed">Geschwindigkeit</button>
+                <button type="button" class="otd-loco-tab" data-tab="details">Einzelheiten</button>
+                <button type="button" class="otd-loco-tab" data-tab="functions">Funktionen</button>
+                <button type="button" class="otd-loco-tab" data-tab="multiple">Mehrfachtraktion</button>
+                <button type="button" class="otd-loco-tab" data-tab="cv">CV</button>
+            </div>
 
-            </label>
-            <label>
-                Length (cm)
-                <input type="number" id="loco-length" min="0" max="50" />
-            </label>
-            <label>
-                Vmax (km/h)
-                <input type="number" id="loco-vmax" min="1" max="500" />
-            </label>
-            <label>
-                Vmin (km/h)
-                <input type="number" id="loco-vmin" min="1" max="500" />
-            </label>
-            <label class="otd-loco-notes">
-                Notes
-                <textarea id="loco-notes" rows="2" maxlength="240"></textarea>
-            </label>
+            <div class="otd-loco-tabpanel" data-tab="overview">
+                <div class="otd-loco-section">
+                    <div class="otd-loco-section-title">Uebersicht</div>
+                    <div class="otd-loco-overview">
+                        Waehle rechts eine Lok oder lege eine neue an. Speichern schreibt direkt nach loco.xml.
+                        <ul class="otd-loco-overview-list">
+                            <li>Allgemein: Grunddaten und Modellangaben.</li>
+                            <li>Schnittstelle: Decoder-Protokoll und Adresse.</li>
+                            <li>Geschwindigkeit: Speedtable (Fahrstufen/V-Werte).</li>
+                            <li>Einzelheiten: Betrieb und Service-Historie.</li>
+                            <li>Funktionen: Funktionstabelle mit Zuordnung.</li>
+                            <li>Mehrfachtraktion: Reserviert fuer Kuppelung.</li>
+                            <li>CV: Reserviert fuer Decoder-CVs.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="otd-loco-tabpanel is-active" data-tab="general">
+            <div class="otd-loco-section">
+                <div class="otd-loco-section-title">Grunddaten</div>
+                <div class="otd-loco-grid">
+                    <label>
+                        UID
+                        <input type="text" id="loco-uid" maxlength="64" />
+                    </label>
+                    <label>
+                        Name
+                        <input type="text" id="loco-name" maxlength="32" />
+                    </label>
+                    <label>
+                        Length (cm)
+                        <input type="number" id="loco-length" min="0" max="200" />
+                    </label>
+                    <label>
+                        Axles
+                        <input type="number" id="loco-axles" min="0" max="32" />
+                    </label>
+                    <label>
+                        Index
+                        <input type="number" id="loco-index" min="0" max="999" />
+                    </label>
+                </div>
+            </div>
+
+            <div class="otd-loco-section">
+                <div class="otd-loco-section-title">Model</div>
+                <div class="otd-loco-grid otd-loco-grid-wide">
+                    <label>
+                        Manufacturer
+                        <input type="text" id="loco-model-manufacturer" maxlength="64" />
+                    </label>
+                    <label>
+                        Scale
+                        <select id="loco-model-scale">
+                            <option value=""></option>
+                            <option value="H0">H0</option>
+                            <option value="N">N</option>
+                            <option value="TT">TT</option>
+                            <option value="0">0</option>
+                            <option value="G">G</option>
+                        </select>
+                    </label>
+                    <label>
+                        Catalog number
+                        <input type="text" id="loco-model-catalog" maxlength="64" />
+                    </label>
+                    <label class="otd-loco-span-2">
+                        Description
+                        <textarea id="loco-model-description" rows="2" maxlength="240"></textarea>
+                    </label>
+                    <label>
+                        Operator
+                        <input type="text" id="loco-model-operator" maxlength="64" />
+                    </label>
+                    <label>
+                        Class
+                        <input type="text" id="loco-model-class" maxlength="64" />
+                    </label>
+                    <label>
+                        Fleet number
+                        <input type="text" id="loco-model-fleet" maxlength="64" />
+                    </label>
+                    <label>
+                        Traction type
+                        <select id="loco-model-tractiontype">
+                            <option value=""></option>
+                            <option value="electric">electric</option>
+                            <option value="diesel">diesel</option>
+                            <option value="steam">steam</option>
+                            <option value="battery">battery</option>
+                            <option value="hybrid">hybrid</option>
+                        </select>
+                    </label>
+                    <label>
+                        Weight (t)
+                        <input type="number" id="loco-model-weight" min="0" step="0.1" />
+                    </label>
+                    <label>
+                        Vmax (km/h)
+                        <input type="number" id="loco-model-vmax" min="0" step="1" />
+                    </label>
+                    <label class="otd-loco-span-2">
+                        Icon
+                        <input type="text" id="loco-model-icon" maxlength="128" />
+                    </label>
+                    <label class="otd-loco-span-2">
+                        Notes
+                        <textarea id="loco-model-notes" rows="2" maxlength="240"></textarea>
+                    </label>
+                </div>
+            </div>
+            </div>
+
+            <div class="otd-loco-tabpanel" data-tab="interface">
+            <div class="otd-loco-section">
+                <div class="otd-loco-section-title">Decoder</div>
+                <div class="otd-loco-grid">
+                    <label>
+                        Protocol
+                        <select id="loco-decoder-protocol">
+                            <option value=""></option>
+                            <option value="DCC128">DCC128</option>
+                            <option value="DCC28">DCC28</option>
+                            <option value="DCC14">DCC14</option>
+                            <option value="MM1">MM1</option>
+                            <option value="MM2">MM2</option>
+                        </select>
+                    </label>
+                    <label>
+                        Address
+                        <input type="number" id="loco-decoder-address" min="1" max="9999" />
+                    </label>
+                    <label>
+                        Address type
+                        <select id="loco-decoder-addresstype">
+                            <option value=""></option>
+                            <option value="short">short</option>
+                            <option value="long">long</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            </div>
+
+            <div class="otd-loco-tabpanel" data-tab="speed">
+                <div class="otd-loco-section">
+                    <div class="otd-loco-section-title">Geschwindigkeit</div>
+                    <div class="otd-loco-subtitle">Speed table</div>
+                    <div class="otd-loco-table-wrap">
+                        <table class="otd-loco-table">
+                            <thead>
+                                <tr>
+                                    <th>Step</th>
+                                    <th>V</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="loco-speed-rows"></tbody>
+                        </table>
+                    </div>
+                    <div class="otd-loco-table-actions">
+                        <button type="button" id="loco-speed-add">Speed hinzufuegen</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="otd-loco-tabpanel" data-tab="functions">
+                <div class="otd-loco-section">
+                    <div class="otd-loco-section-title">Funktionen</div>
+                    <div class="otd-loco-subtitle">Function table</div>
+                    <div class="otd-loco-table-wrap">
+                        <table class="otd-loco-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Description</th>
+                                    <th>Actuation</th>
+                                    <th>Type</th>
+                                    <th>Category</th>
+                                    <th>Visible</th>
+                                    <th>Image</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="loco-function-rows"></tbody>
+                        </table>
+                    </div>
+                    <div class="otd-loco-table-actions">
+                        <button type="button" id="loco-function-add">Funktion hinzufuegen</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="otd-loco-tabpanel" data-tab="details">
+            <div class="otd-loco-section">
+                <div class="otd-loco-section-title">Operation</div>
+                <div class="otd-loco-grid otd-loco-grid-wide">
+                    <label>
+                        Purchase date
+                        <input type="date" id="loco-operation-purchasedate" />
+                    </label>
+                    <label>
+                        Operating time total
+                        <input type="number" id="loco-operation-operating-total" min="0" step="0.1" />
+                    </label>
+                    <label>
+                        Operating time service
+                        <input type="number" id="loco-operation-operating-service" min="0" step="0.1" />
+                    </label>
+                    <label>
+                        Travel distance
+                        <input type="number" id="loco-operation-travel" min="0" step="0.1" />
+                    </label>
+                    <label>
+                        Service interval
+                        <input type="number" id="loco-operation-serviceinterval" min="0" step="0.1" />
+                    </label>
+                    <label>
+                        Refuel interval
+                        <input type="number" id="loco-operation-refuelinterval" min="0" step="0.1" />
+                    </label>
+                </div>
+                <div class="otd-loco-subtitle">Service table</div>
+                <div class="otd-loco-issues" id="loco-service-issues"></div>
+                <div class="otd-loco-table-actions">
+                    <button type="button" id="loco-service-add">Service-Eintrag hinzufuegen</button>
+                </div>
+            </div>
+            </div>
+
+            <div class="otd-loco-tabpanel" data-tab="multiple">
+                <div class="otd-loco-section">
+                    <div class="otd-loco-section-title">Mehrfachtraktion</div>
+                    <div class="otd-loco-overview">Noch nicht implementiert.</div>
+                </div>
+            </div>
+
+            <div class="otd-loco-tabpanel" data-tab="cv">
+                <div class="otd-loco-section">
+                    <div class="otd-loco-section-title">CV</div>
+                    <div class="otd-loco-overview">Noch nicht implementiert.</div>
+                </div>
+            </div>
+
+
             <div class="otd-loco-buttons">
                 <button type="button" id="loco-new">Neu</button>
                 <button type="button" id="loco-add">Hinzufuegen / Aktualisieren</button>
@@ -50,10 +283,11 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>address</th>
+                            <th>UID</th>
                             <th>Length</th>
+                            <th>Axles</th>
                             <th>Vmax</th>
-                            <th>VMin</th>
+                            <th>Address</th>
                             <th>Notes</th>
                             <th></th>
                         </tr>
@@ -72,12 +306,37 @@
         if (!panel) return;
 
         const statusEl = document.getElementById('otd-loco-status');
+        const uidInput = document.getElementById('loco-uid');
         const nameInput = document.getElementById('loco-name');
-        const addressInput = document.getElementById('loco-address');
         const lengthInput = document.getElementById('loco-length');
-        const vmaxInput = document.getElementById('loco-vmax');
-        const vminInput = document.getElementById('loco-vmin');
-        const notesInput = document.getElementById('loco-notes');
+        const axlesInput = document.getElementById('loco-axles');
+        const indexInput = document.getElementById('loco-index');
+
+        const modelManufacturerInput = document.getElementById('loco-model-manufacturer');
+        const modelScaleSelect = document.getElementById('loco-model-scale');
+        const modelCatalogInput = document.getElementById('loco-model-catalog');
+        const modelDescriptionInput = document.getElementById('loco-model-description');
+        const modelOperatorInput = document.getElementById('loco-model-operator');
+        const modelClassInput = document.getElementById('loco-model-class');
+        const modelFleetInput = document.getElementById('loco-model-fleet');
+        const modelTractionSelect = document.getElementById('loco-model-tractiontype');
+        const modelWeightInput = document.getElementById('loco-model-weight');
+        const modelVmaxInput = document.getElementById('loco-model-vmax');
+        const modelIconInput = document.getElementById('loco-model-icon');
+        const modelNotesInput = document.getElementById('loco-model-notes');
+
+        const decoderProtocolSelect = document.getElementById('loco-decoder-protocol');
+        const decoderAddressInput = document.getElementById('loco-decoder-address');
+        const decoderAddressTypeSelect = document.getElementById('loco-decoder-addresstype');
+        const functionRows = document.getElementById('loco-function-rows');
+        const functionAddBtn = document.getElementById('loco-function-add');
+        const speedRows = document.getElementById('loco-speed-rows');
+        const speedAddBtn = document.getElementById('loco-speed-add');
+        const serviceIssues = document.getElementById('loco-service-issues');
+        const serviceAddBtn = document.getElementById('loco-service-add');
+        const tabButtons = panel.querySelectorAll('.otd-loco-tab');
+        const tabPanels = panel.querySelectorAll('.otd-loco-tabpanel');
+
         const rowsBody = document.getElementById('loco-rows');
         const addBtn = document.getElementById('loco-add');
         const newBtn = document.getElementById('loco-new');
@@ -95,13 +354,60 @@
             if (statusEl) statusEl.textContent = text;
         }
 
+        function setActiveTab(tabKey) {
+            tabButtons.forEach(btn => {
+                const active = btn.dataset.tab === tabKey;
+                btn.classList.toggle('is-active', active);
+                btn.setAttribute('aria-selected', active ? 'true' : 'false');
+            });
+            tabPanels.forEach(panelEl => {
+                const active = panelEl.dataset.tab === tabKey;
+                panelEl.classList.toggle('is-active', active);
+                panelEl.setAttribute('aria-hidden', active ? 'false' : 'true');
+            });
+        }
+
+        function ensureSelectValue(select, value) {
+            if (!select) return;
+            const normalized = value ?? '';
+            const has = Array.from(select.options).some(option => option.value === normalized);
+            if (!has && normalized !== '') {
+                const option = document.createElement('option');
+                option.value = normalized;
+                option.textContent = normalized;
+                select.appendChild(option);
+            }
+            select.value = normalized;
+        }
+
         function resetForm() {
+            uidInput.value = '';
             nameInput.value = '';
-            addressInput.value = '';
             lengthInput.value = '';
-            vmaxInput.value = '';
-            vminInput.value = '';
-            notesInput.value = '';
+            axlesInput.value = '';
+            indexInput.value = '';
+
+            modelManufacturerInput.value = '';
+            ensureSelectValue(modelScaleSelect, '');
+            modelCatalogInput.value = '';
+            modelDescriptionInput.value = '';
+            modelOperatorInput.value = '';
+            modelClassInput.value = '';
+            modelFleetInput.value = '';
+            ensureSelectValue(modelTractionSelect, '');
+            modelWeightInput.value = '';
+            modelVmaxInput.value = '';
+            modelIconInput.value = '';
+            modelNotesInput.value = '';
+
+            ensureSelectValue(decoderProtocolSelect, '');
+            decoderAddressInput.value = '';
+            ensureSelectValue(decoderAddressTypeSelect, '');
+
+            functionRows.innerHTML = '';
+            speedRows.innerHTML = '';
+            serviceIssues.innerHTML = '';
+
             state.selectedId = null;
             addBtn.textContent = 'Hinzufuegen / Aktualisieren';
         }
@@ -110,33 +416,186 @@
             rowsBody.innerHTML = '';
             for (const item of state.items) {
                 const tr = document.createElement('tr');
+                const vmax = item.model?.vmax ?? '';
+                const address = item.decoder?.address ?? '';
+                const notes = item.model?.notes ?? '';
                 tr.innerHTML = `
                     <td>${item.name ?? ''}</td>
-                    <td>${item.address ?? ''}</td>
+                    <td>${item.uid ?? ''}</td>
                     <td>${item.length ?? ''}</td>
-                    <td>${item.vmax ?? ''}</td>
-                    <td>${item.vmin ?? ''}</td>
-                    <td>${item.notes ?? ''}</td>
+                    <td>${item.axles ?? ''}</td>
+                    <td>${vmax}</td>
+                    <td>${address}</td>
+                    <td>${notes}</td>
                     <td class="otd-loco-actions-cell">
-                        <button type="button" data-id="${item.id}" class="otd-loco-row-edit">Bearbeiten</button>
-                        <button type="button" data-id="${item.id}" class="otd-loco-row-delete">Entfernen</button>
+                        <button type="button" data-id="${item.uid}" class="otd-loco-row-edit">Bearbeiten</button>
+                        <button type="button" data-id="${item.uid}" class="otd-loco-row-delete">Entfernen</button>
                     </td>
                 `;
-                tr.dataset.id = item.id ?? '';
+                tr.dataset.id = item.uid ?? '';
                 tr.draggable = true;
                 rowsBody.appendChild(tr);
             }
         }
+        function createFunctionRow(item = {}) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="number" min="0" max="99" class="otd-loco-input-small" /></td>
+                <td><input type="text" class="otd-loco-input-wide" /></td>
+                <td><input type="text" class="otd-loco-input-medium" /></td>
+                <td><input type="text" class="otd-loco-input-medium" /></td>
+                <td><input type="text" class="otd-loco-input-medium" /></td>
+                <td>
+                    <select class="otd-loco-input-small">
+                        <option value=""></option>
+                        <option value="true">true</option>
+                        <option value="false">false</option>
+                    </select>
+                </td>
+                <td><input type="text" class="otd-loco-input-medium" /></td>
+                <td><button type="button" class="otd-loco-row-remove">X</button></td>
+            `;
+            const inputs = tr.querySelectorAll('input');
+            const select = tr.querySelector('select');
+            inputs[0].value = item.no ?? '';
+            inputs[1].value = item.description ?? '';
+            inputs[2].value = item.actuation ?? '';
+            inputs[3].value = item.type ?? '';
+            inputs[4].value = item.category ?? '';
+            inputs[5].value = item.image ?? '';
+            ensureSelectValue(select, item.visible ?? '');
+            tr.querySelector('.otd-loco-row-remove')?.addEventListener('click', () => tr.remove());
+            return tr;
+        }
+
+        function createSpeedRow(item = {}) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="number" min="0" max="128" class="otd-loco-input-small" /></td>
+                <td><input type="number" min="0" max="500" class="otd-loco-input-small" /></td>
+                <td><button type="button" class="otd-loco-row-remove">X</button></td>
+            `;
+            const inputs = tr.querySelectorAll('input');
+            inputs[0].value = item.step ?? '';
+            inputs[1].value = item.v ?? '';
+            tr.querySelector('.otd-loco-row-remove')?.addEventListener('click', () => tr.remove());
+            return tr;
+        }
+
+        function createServiceIssue(issue = {}) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'otd-loco-issue';
+            wrapper.innerHTML = `
+                <div class="otd-loco-issue-head">
+                    <label>
+                        Date
+                        <input type="date" class="otd-loco-issue-date" />
+                    </label>
+                    <label>
+                        Type
+                        <input type="text" class="otd-loco-issue-type" maxlength="32" />
+                    </label>
+                    <button type="button" class="otd-loco-row-remove">X</button>
+                </div>
+                <label class="otd-loco-issue-items">
+                    Items (eine Zeile pro Eintrag)
+                    <textarea rows="3" class="otd-loco-issue-text"></textarea>
+                </label>
+            `;
+            const dateInput = wrapper.querySelector('.otd-loco-issue-date');
+            const typeInput = wrapper.querySelector('.otd-loco-issue-type');
+            const textArea = wrapper.querySelector('.otd-loco-issue-text');
+            dateInput.value = issue.date ?? '';
+            typeInput.value = issue.type ?? '';
+            textArea.value = (issue.items ?? []).join('\n');
+            wrapper.querySelector('.otd-loco-row-remove')?.addEventListener('click', () => wrapper.remove());
+            return wrapper;
+        }
 
         function fillForm(item) {
+            uidInput.value = item.uid ?? '';
             nameInput.value = item.name ?? '';
-            addressInput.value = item.address ?? '';
             lengthInput.value = item.length ?? '';
-            vmaxInput.value = item.vmax ?? '';
-            vminInput.value = item.vmin ?? '';
-            notesInput.value = item.notes ?? '';
-            state.selectedId = item.id;
+            axlesInput.value = item.axles ?? '';
+            indexInput.value = item.index ?? '';
+
+            const model = item.model ?? {};
+            modelManufacturerInput.value = model.manufacturer ?? '';
+            ensureSelectValue(modelScaleSelect, model.scale ?? '');
+            modelCatalogInput.value = model.catalogNumber ?? '';
+            modelDescriptionInput.value = model.description ?? '';
+            modelOperatorInput.value = model.operator ?? '';
+            modelClassInput.value = model.className ?? '';
+            modelFleetInput.value = model.fleetNumber ?? '';
+            ensureSelectValue(modelTractionSelect, model.tractionType ?? '');
+            modelWeightInput.value = model.weight ?? '';
+            modelVmaxInput.value = model.vmax ?? '';
+            modelIconInput.value = model.icon ?? '';
+            modelNotesInput.value = model.notes ?? '';
+
+            const decoder = item.decoder ?? {};
+            ensureSelectValue(decoderProtocolSelect, decoder.protocol ?? '');
+            decoderAddressInput.value = decoder.address ?? '';
+            ensureSelectValue(decoderAddressTypeSelect, decoder.addressType ?? '');
+
+            functionRows.innerHTML = '';
+            (decoder.functions ?? []).forEach(fn => functionRows.appendChild(createFunctionRow(fn)));
+
+            speedRows.innerHTML = '';
+            (decoder.speeds ?? []).forEach(speed => speedRows.appendChild(createSpeedRow(speed)));
+
+            const operation = item.operation ?? {};
+            document.getElementById('loco-operation-purchasedate').value = operation.purchaseDate ?? '';
+            document.getElementById('loco-operation-operating-total').value = operation.operatingTimeTotal ?? '';
+            document.getElementById('loco-operation-operating-service').value = operation.operatingTimeService ?? '';
+            document.getElementById('loco-operation-travel').value = operation.travelDistance ?? '';
+            document.getElementById('loco-operation-serviceinterval').value = operation.serviceInterval ?? '';
+            document.getElementById('loco-operation-refuelinterval').value = operation.refuelInterval ?? '';
+
+            serviceIssues.innerHTML = '';
+            (operation.serviceIssues ?? []).forEach(issue => serviceIssues.appendChild(createServiceIssue(issue)));
+
+            state.selectedId = item.uid;
             addBtn.textContent = 'Aktualisieren';
+        }
+
+        function collectFunctionRows() {
+            const rows = Array.from(functionRows.querySelectorAll('tr'));
+            return rows.map(row => {
+                const inputs = row.querySelectorAll('input');
+                const visibleSelect = row.querySelector('select');
+                return {
+                    no: inputs[0]?.value.trim() ?? '',
+                    description: inputs[1]?.value.trim() ?? '',
+                    actuation: inputs[2]?.value.trim() ?? '',
+                    type: inputs[3]?.value.trim() ?? '',
+                    category: inputs[4]?.value.trim() ?? '',
+                    visible: visibleSelect?.value ?? '',
+                    image: inputs[5]?.value.trim() ?? ''
+                };
+            }).filter(fn => Object.values(fn).some(value => value !== ''));
+        }
+
+        function collectSpeedRows() {
+            const rows = Array.from(speedRows.querySelectorAll('tr'));
+            return rows.map(row => {
+                const inputs = row.querySelectorAll('input');
+                return {
+                    step: inputs[0]?.value.trim() ?? '',
+                    v: inputs[1]?.value.trim() ?? ''
+                };
+            }).filter(speed => speed.step !== '' || speed.v !== '');
+        }
+
+        function collectServiceIssues() {
+            const issues = Array.from(serviceIssues.querySelectorAll('.otd-loco-issue'));
+            return issues.map(wrapper => {
+                const date = wrapper.querySelector('.otd-loco-issue-date')?.value.trim() ?? '';
+                const type = wrapper.querySelector('.otd-loco-issue-type')?.value.trim() ?? '';
+                const text = wrapper.querySelector('.otd-loco-issue-text')?.value ?? '';
+                const items = text.split('\n').map(line => line.trim()).filter(line => line !== '');
+                return { date, type, items };
+            }).filter(issue => issue.date !== '' || issue.type !== '' || issue.items.length > 0);
         }
 
         async function loadFromServer() {
@@ -154,14 +613,80 @@
                 const doc = new DOMParser().parseFromString(xml, 'application/xml');
                 const list = [];
                 doc.querySelectorAll('locos > loco').forEach(node => {
+                    const modelNode = node.querySelector('model');
+                    const decoderNode = node.querySelector('decoder');
+                    const operationNode = node.querySelector('operation');
+
+                    const functions = [];
+                    decoderNode?.querySelectorAll('functiontable > function').forEach(fn => {
+                        functions.push({
+                            no: fn.getAttribute('no') ?? '',
+                            description: fn.getAttribute('description') ?? '',
+                            actuation: fn.getAttribute('actuation') ?? '',
+                            type: fn.getAttribute('type') ?? '',
+                            category: fn.getAttribute('category') ?? '',
+                            visible: fn.getAttribute('visible') ?? '',
+                            image: fn.getAttribute('image') ?? ''
+                        });
+                    });
+
+                    const speeds = [];
+                    decoderNode?.querySelectorAll('speedtable > speed').forEach(speed => {
+                        speeds.push({
+                            step: speed.getAttribute('step') ?? '',
+                            v: speed.getAttribute('v') ?? ''
+                        });
+                    });
+
+                    const serviceIssuesList = [];
+                    operationNode?.querySelectorAll('servicetable > issue').forEach(issue => {
+                        const items = [];
+                        issue.querySelectorAll('item').forEach(item => {
+                            items.push(item.textContent ?? '');
+                        });
+                        serviceIssuesList.push({
+                            date: issue.getAttribute('date') ?? '',
+                            type: issue.getAttribute('type') ?? '',
+                            items
+                        });
+                    });
+
                     list.push({
-                        id: node.getAttribute('id') || crypto.randomUUID(),
-                        name: node.querySelector('name')?.textContent ?? '',
-                        address: node.querySelector('address')?.textContent ?? '',
-                        length: node.querySelector('length')?.textContent ?? '',
-                        vmax: node.querySelector('vmax')?.textContent ?? '',
-                        vmin: node.querySelector('vmin')?.textContent ?? '',
-                        notes: node.querySelector('notes')?.textContent ?? ''
+                        uid: node.getAttribute('uid') || crypto.randomUUID(),
+                        name: node.getAttribute('name') ?? '',
+                        length: node.getAttribute('length') ?? '',
+                        axles: node.getAttribute('axles') ?? '',
+                        index: node.getAttribute('index') ?? '',
+                        model: {
+                            manufacturer: modelNode?.getAttribute('manufacturer') ?? '',
+                            scale: modelNode?.getAttribute('scale') ?? '',
+                            catalogNumber: modelNode?.getAttribute('catalognumber') ?? '',
+                            description: modelNode?.querySelector('description')?.textContent ?? '',
+                            operator: modelNode?.querySelector('operator')?.textContent ?? '',
+                            className: modelNode?.querySelector('class')?.textContent ?? '',
+                            fleetNumber: modelNode?.querySelector('fleetnumber')?.textContent ?? '',
+                            tractionType: modelNode?.querySelector('tractiontype')?.textContent ?? '',
+                            weight: modelNode?.querySelector('weight')?.textContent ?? '',
+                            vmax: modelNode?.querySelector('vmax')?.textContent ?? '',
+                            icon: modelNode?.querySelector('icon')?.textContent ?? '',
+                            notes: modelNode?.querySelector('notes')?.textContent ?? ''
+                        },
+                        decoder: {
+                            protocol: decoderNode?.querySelector('protocol')?.textContent ?? '',
+                            address: decoderNode?.querySelector('address')?.textContent ?? '',
+                            addressType: decoderNode?.querySelector('addresstype')?.textContent ?? '',
+                            functions,
+                            speeds
+                        },
+                        operation: {
+                            purchaseDate: operationNode?.querySelector('purchasedate')?.textContent ?? '',
+                            operatingTimeTotal: operationNode?.querySelector('operatingtime_total')?.textContent ?? '',
+                            operatingTimeService: operationNode?.querySelector('operatingtime_service')?.textContent ?? '',
+                            travelDistance: operationNode?.querySelector('traveldistance')?.textContent ?? '',
+                            serviceInterval: operationNode?.querySelector('serviceinterval')?.textContent ?? '',
+                            refuelInterval: operationNode?.querySelector('refuleinterval')?.textContent ?? '',
+                            serviceIssues: serviceIssuesList
+                        }
                     });
                 });
                 state.items = list;
@@ -172,7 +697,6 @@
                 setStatus('Laden fehlgeschlagen');
             }
         }
-
         async function saveToServer() {
             try {
                 setStatus('Speichere ...');
@@ -194,24 +718,53 @@
                 setStatus('Name wird benoetigt');
                 return;
             }
-            const id = state.selectedId ?? crypto.randomUUID();
-            const existing = state.items.find(i => i.id === id);
+            const uid = uidInput.value.trim() || crypto.randomUUID();
+            const existing = state.items.find(i => i.uid === uid);
             const payload = {
-                id,
+                uid,
                 name,
-                address: addressInput.value.trim(),
                 length: lengthInput.value.trim(),
-                vmax: vmaxInput.value.trim(),
-                vmin: vminInput.value.trim(),
-                notes: notesInput.value.trim()
+                axles: axlesInput.value.trim(),
+                index: indexInput.value.trim(),
+                model: {
+                    manufacturer: modelManufacturerInput.value.trim(),
+                    scale: modelScaleSelect.value,
+                    catalogNumber: modelCatalogInput.value.trim(),
+                    description: modelDescriptionInput.value.trim(),
+                    operator: modelOperatorInput.value.trim(),
+                    className: modelClassInput.value.trim(),
+                    fleetNumber: modelFleetInput.value.trim(),
+                    tractionType: modelTractionSelect.value,
+                    weight: modelWeightInput.value.trim(),
+                    vmax: modelVmaxInput.value.trim(),
+                    icon: modelIconInput.value.trim(),
+                    notes: modelNotesInput.value.trim()
+                },
+                decoder: {
+                    protocol: decoderProtocolSelect.value,
+                    address: decoderAddressInput.value.trim(),
+                    addressType: decoderAddressTypeSelect.value,
+                    functions: collectFunctionRows(),
+                    speeds: collectSpeedRows()
+                },
+                operation: {
+                    purchaseDate: document.getElementById('loco-operation-purchasedate').value.trim(),
+                    operatingTimeTotal: document.getElementById('loco-operation-operating-total').value.trim(),
+                    operatingTimeService: document.getElementById('loco-operation-operating-service').value.trim(),
+                    travelDistance: document.getElementById('loco-operation-travel').value.trim(),
+                    serviceInterval: document.getElementById('loco-operation-serviceinterval').value.trim(),
+                    refuelInterval: document.getElementById('loco-operation-refuelinterval').value.trim(),
+                    serviceIssues: collectServiceIssues()
+                }
             };
             if (existing) {
                 Object.assign(existing, payload);
             } else {
                 state.items.push(payload);
             }
+            uidInput.value = uid;
             renderList();
-            state.selectedId = id;
+            state.selectedId = uid;
             addBtn.textContent = 'Aktualisieren';
             setStatus('Lokomotive uebernommen (nicht gespeichert)');
         }
@@ -220,10 +773,10 @@
             const editBtn = evt.target.closest('.otd-loco-row-edit');
             const delBtn = evt.target.closest('.otd-loco-row-delete');
             if (editBtn) {
-                const item = state.items.find(i => i.id === editBtn.dataset.id);
+                const item = state.items.find(i => i.uid === editBtn.dataset.id);
                 if (item) fillForm(item);
             } else if (delBtn) {
-                state.items = state.items.filter(i => i.id !== delBtn.dataset.id);
+                state.items = state.items.filter(i => i.uid !== delBtn.dataset.id);
                 if (state.selectedId === delBtn.dataset.id) {
                     state.selectedId = null;
                     resetForm();
@@ -236,14 +789,15 @@
         rowsBody.addEventListener('dragstart', (evt) => {
             const row = evt.target.closest('tr');
             if (!row) return;
-            const item = state.items.find(i => i.id === row.dataset.id);
+            const item = state.items.find(i => i.uid === row.dataset.id);
             if (!item) return;
             const payload = {
                 type: 'loco',
-                id: item.id,
+                id: item.uid,
                 name: item.name,
                 length: item.length,
-                vmax: item.vmax
+                axles: item.axles,
+                vmax: item.model?.vmax ?? ''
             };
             evt.dataTransfer?.setData('application/json', JSON.stringify(payload));
             evt.dataTransfer?.setDragImage(row, 16, 16);
@@ -254,7 +808,7 @@
                 setStatus('Kein Eintrag ausgewaehlt');
                 return;
             }
-            state.items = state.items.filter(i => i.id !== state.selectedId);
+            state.items = state.items.filter(i => i.uid !== state.selectedId);
             state.selectedId = null;
             resetForm();
             renderList();
@@ -262,19 +816,36 @@
             await saveToServer();
         }
 
+        functionAddBtn?.addEventListener('click', () => {
+            functionRows.appendChild(createFunctionRow());
+        });
+        speedAddBtn?.addEventListener('click', () => {
+            speedRows.appendChild(createSpeedRow());
+        });
+        serviceAddBtn?.addEventListener('click', () => {
+            serviceIssues.appendChild(createServiceIssue());
+        });
+
         addBtn?.addEventListener('click', addOrUpdate);
         newBtn?.addEventListener('click', () => resetForm());
         deleteBtn?.addEventListener('click', deleteSelected);
         saveBtn?.addEventListener('click', saveToServer);
         reloadBtn?.addEventListener('click', loadFromServer);
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabKey = btn.dataset.tab;
+                if (tabKey) setActiveTab(tabKey);
+            });
+        });
 
         window.openLokoFenster = function () {
             panel.classList.remove('otd-hidden');
+            setActiveTab('general');
             if (!panel.style.left || !panel.style.top) {
                 const workspace = document.querySelector('.otd-workspace');
                 const rect = workspace?.getBoundingClientRect();
-                const width = panel.offsetWidth || 720;
-                const height = panel.offsetHeight || 360;
+                const width = panel.offsetWidth || 980;
+                const height = panel.offsetHeight || 720;
                 const left = rect ? Math.max(12, (rect.width - width) / 2) : 12;
                 const top = rect ? Math.max(12, (rect.height - height) / 2) : 12;
                 panel.style.left = `${left}px`;
