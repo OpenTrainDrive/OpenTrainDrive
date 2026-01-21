@@ -28,11 +28,13 @@ public class SingleSwitch
     public bool Occupied { get; set; }
     public bool SideCollisonClosure { get; set; }
     public bool SwitchCut { get; set; }
+    public string SwitchName { get; set; } = "unnamed";
     public string SvgDirectory { get; set; } = "SVG";
     public string? ColorOverride { get; set; }
     public string? ClosureSvgFile { get; set; }
     public Dictionary<SingleSwitchAspect, string> SvgFileOverrides { get; } = new();
     public Dictionary<string, string> SvgColorOverrides { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public SvgApi Svg { get; } = new SvgApi();
     public string? SvgToken { get; private set; }
     public string? SvgFile { get; private set; }
     public string? SvgPath { get; private set; }
@@ -58,7 +60,7 @@ public class SingleSwitch
         {
             SwitchLeft = !SwitchLeft;
             SwitchRight = !SwitchLeft;
-            Console.WriteLine("Manual switch toggled.");
+            Console.WriteLine(SwitchName + ": Manual switch toggled.");
         }
 
         _lastManualSwitch = ManualSwitch;
@@ -67,19 +69,23 @@ public class SingleSwitch
             SwitchLeft = false;
             SwitchRight = true;
             SwitchClosure = true;
-            Console.WriteLine("Automatic switch to right with closure activated.");
+            Console.WriteLine(SwitchName + ": Automatic switch to right with closure activated.");
+            UpdateSvg();
+            return;
         }
         if (AutomaticSwitchLeftWithClosure && canSwitch)
         {
             SwitchLeft = true;
             SwitchRight = false;
             SwitchClosure = true;
-            Console.WriteLine("Automatic switch to left with closure activated.");
+            Console.WriteLine(SwitchName + ": Automatic switch to left with closure activated.");
+            UpdateSvg();
+            return;
         }
         if (!PowerOn || Error)
         {
             Aspect = SingleSwitchAspect.magenta;
-            Console.WriteLine("Aspect set to magenta because PowerOff or Error");
+            Console.WriteLine(SwitchName + ": Aspect set to magenta because PowerOff or Error");
             UpdateSvg();
             return;
         }
@@ -87,43 +93,54 @@ public class SingleSwitch
         if (SwitchCut)
         {
             Aspect = SingleSwitchAspect.SwitchCut;
-            Console.WriteLine("Aspect set to SwitchCut");
+            Console.WriteLine(SwitchName + ": Aspect set to SwitchCut");
+            UpdateSvg();
+            return;
         }
         else if (SideCollisonClosure)
         {
             Aspect = SingleSwitchAspect.SideCollisonClosure;
-            Console.WriteLine("Aspect set to SideCollisonClosure");
+            Console.WriteLine(SwitchName + ": Aspect set to SideCollisonClosure");
+            UpdateSvg();
+            return;
         }
         else if (SingleClosure)
         {
             Aspect = SingleSwitchAspect.SingleClosure;
-            Console.WriteLine("Aspect set to SingleClosure");
+            Console.WriteLine(SwitchName + ": Aspect set to SingleClosure");
+            UpdateSvg();
+            return;
         }
         else if (SwitchClosure)
         {
             Aspect = SingleSwitchAspect.Closure;
-            Console.WriteLine("Aspect set to Closure");
+            Console.WriteLine(SwitchName + ": Aspect set to Closure");
+            UpdateSvg();
+            return;
         }
         else if (SwitchLeft)
         {
             SwitchLeft = true;
             SwitchRight = false;
             Aspect = SingleSwitchAspect.left;
-            Console.WriteLine("Aspect set to left");
-            
+            Console.WriteLine(SwitchName + ": Aspect set to left");
+            UpdateSvg();
+            return;
         }
         else if (SwitchRight)
         {
             SwitchLeft = false;
             SwitchRight = true;
             Aspect = SingleSwitchAspect.right;
-            Console.WriteLine("Aspect set to right");
+            Console.WriteLine(SwitchName + ": Aspect set to right");
+            UpdateSvg();
+            return;
         }
         else
         {
             SwitchCut = true;
             Aspect = SingleSwitchAspect.SwitchCut;
-            Console.WriteLine("Aspect set to SwitchCut as fallback");
+            Console.WriteLine(SwitchName + ": Aspect set to SwitchCut as fallback");
         }
 
         UpdateSvg();
@@ -158,6 +175,7 @@ public class SingleSwitch
                 SvgToken = $"SVG.{elementName.ToLowerInvariant()}.{color.ToLowerInvariant()}";
                 SvgFile = closureFile;
                 SvgPath = $"/svg/{closureFile}";
+                Svg.Replace(closureFile);
                 return;
             }
         }
@@ -172,6 +190,7 @@ public class SingleSwitch
         SvgToken = $"SVG.{elementName.ToLowerInvariant()}.{color.ToLowerInvariant()}";
         SvgFile = SvgSymbolResolver.ResolveSvgFile(elementName, color, SvgDirectory);
         SvgPath = SvgSymbolResolver.ResolveSvgPath(elementName, color, SvgDirectory);
+        Svg.Replace(SvgFile);
     }
 
     private string MapAspectToColor()
@@ -220,5 +239,6 @@ public class SingleSwitch
         SvgToken = token;
         SvgFile = normalized;
         SvgPath = $"/svg/{normalized}";
+        Svg.Replace(normalized);
     }
 }

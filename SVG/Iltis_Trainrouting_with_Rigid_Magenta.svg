@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 12.7 12.7"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="Iltis_Trainrouting_with_Rigid_Magenta.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:zoom="26.737475"
+     inkscape:cx="18.419839"
+     inkscape:cy="27.957015"
+     inkscape:window-width="3840"
+     inkscape:window-height="2054"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs1" />
+  <path
+     style="fill:#fa08ff;fill-opacity:0;stroke:#ff0cfa;stroke-width:0.391583;stroke-dasharray:none;stroke-opacity:1"
+     d="M 6.3822701,6.4722457 11.66519,1.1823285 11.67219,11.244368 Z"
+     id="path1" />
+  <path
+     style="fill:#fa08ff;fill-opacity:1;stroke:#ff0cfa;stroke-width:0.149665;stroke-dasharray:none;stroke-opacity:1"
+     d="m 0.43510664,6.5597934 3.14739706,-1.297068 0.00417,2.467174 z"
+     id="path1-8" />
+  <rect
+     style="fill:#fa08ff;fill-opacity:1;stroke:#ff0cfa;stroke-width:0.203064;stroke-dasharray:none;stroke-opacity:1"
+     id="rect1"
+     width="2.9098082"
+     height="0.61402941"
+     x="3.6363816"
+     y="6.159759"
+     rx="1.3833132e-17" />
+</svg>

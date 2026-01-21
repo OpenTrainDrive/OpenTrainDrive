@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 //muss noch an Signal System N angepasst werden
 public enum SignalAspect_n
@@ -57,9 +56,10 @@ public class image_Signal_n
     public string? ColorOverride { get; set; }
     public Dictionary<SignalAspect_n, string> SvgFileOverrides { get; } = new();
     public Dictionary<string, string> SvgColorOverrides { get; } = new(StringComparer.OrdinalIgnoreCase);
-    public string? SvgToken { get; private set; }
-    public string? SvgFile { get; private set; }
-    public string? SvgPath { get; private set; }
+    public SvgApi Svg { get; } = new SvgApi();
+    public string? SvgToken => Svg.Token;
+    public string? SvgFile => Svg.File;
+    public string? SvgPath => Svg.Path;
 
 
     public SignalAspect_n Aspect { get; private set; } = SignalAspect_n.Magenta;
@@ -238,87 +238,13 @@ public class image_Signal_n
 
     public void UpdateSvg()
     {
-        var color = ColorOverride ?? MapAspectToColor();
-        if (SvgFileOverrides.TryGetValue(Aspect, out var overrideFile) &&
-            !string.IsNullOrWhiteSpace(overrideFile))
-        {
-            ApplySvgOverride(overrideFile, $"SVG.signaln.aspect.{Aspect.ToString().ToLowerInvariant()}");
-            return;
-        }
-
-        if (SvgColorOverrides.TryGetValue(color, out var colorOverride) &&
-            !string.IsNullOrWhiteSpace(colorOverride))
-        {
-            ApplySvgOverride(colorOverride, $"SVG.signaln.color.{color.ToLowerInvariant()}");
-            return;
-        }
-
-        SvgToken = null;
-        SvgFile = null;
-        SvgPath = null;
+        SvgUpdate.ForSignalN(
+            Svg,
+            Aspect,
+            SvgDirectory,
+            ColorOverride,
+            SvgFileOverrides,
+            SvgColorOverrides);
     }
 
-    private string MapAspectToColor()
-    {
-        return Aspect switch
-        {
-            SignalAspect_n.Magenta => "Magenta",
-            SignalAspect_n.H => "Red",
-            SignalAspect_n.NH => "Red",
-            SignalAspect_n.M => "Green",
-            SignalAspect_n.Ges_4_an => "Green",
-            SignalAspect_n.Ges_4_ex => "Green",
-            SignalAspect_n.Ges_5_an => "Green",
-            SignalAspect_n.Ges_5_ex => "Green",
-            SignalAspect_n.Ges_6_an => "Green",
-            SignalAspect_n.Ges_6_ex => "Green",
-            SignalAspect_n.Ges_7_an => "Green",
-            SignalAspect_n.Ges_7_ex => "Green",
-            SignalAspect_n.Ges_8_an => "Green",
-            SignalAspect_n.Ges_8_ex => "Green",
-            SignalAspect_n.Ges_9_an => "Green",  
-            SignalAspect_n.Ges_9_ex => "Green",
-            SignalAspect_n.Ges_10_an => "Green",
-            SignalAspect_n.Ges_10_ex => "Green",
-            SignalAspect_n.Ges_11_an => "Green",
-            SignalAspect_n.Ges_11_ex => "Green",
-            SignalAspect_n.Ges_12_an => "Green",
-            SignalAspect_n.Ges_12_ex => "Green",
-            SignalAspect_n.Ges_13_an => "Green",
-            SignalAspect_n.Ges_13_ex => "Green",
-            SignalAspect_n.Ges_14_an => "Green",
-            SignalAspect_n.Ges_14_ex => "Green",
-            SignalAspect_n.Ges_15_an => "Green",
-            SignalAspect_n.Ges_15_ex => "Green",
-            SignalAspect_n.Ges_16_an => "Green",
-            SignalAspect_n.Ges_16_ex => "Green",   
-            _ => "Green"
-        };
-    }
-
-    private void ApplySvgOverride(string svgOverride, string token)
-    {
-        if (string.IsNullOrWhiteSpace(svgOverride))
-        {
-            return;
-        }
-
-        var normalized = svgOverride.Replace('\\', '/').TrimStart('/');
-        if (Path.IsPathRooted(svgOverride))
-        {
-            normalized = Path.GetFileName(svgOverride);
-        }
-
-        var svgDir = SvgDirectory.Replace('\\', '/').Trim('/');
-        if (!string.IsNullOrWhiteSpace(svgDir) &&
-            normalized.StartsWith(svgDir + "/", StringComparison.OrdinalIgnoreCase))
-        {
-            normalized = normalized.Substring(svgDir.Length + 1);
-        }
-
-        SvgToken = token;
-        SvgFile = normalized;
-        SvgPath = $"/svg/{normalized}";
-    }
 }
-

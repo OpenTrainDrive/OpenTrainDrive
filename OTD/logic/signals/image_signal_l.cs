@@ -41,6 +41,7 @@ public class image_Signal_l
     public string? ColorOverride { get; set; }
     public Dictionary<SignalAspect_l, string> SvgFileOverrides { get; } = new();
     public Dictionary<string, string> SvgColorOverrides { get; } = new(StringComparer.OrdinalIgnoreCase);
+    public SvgApi Svg { get; } = new SvgApi();
     public string? SvgToken { get; private set; }
     public string? SvgFile { get; private set; }
     public string? SvgPath { get; private set; }
@@ -76,24 +77,32 @@ public class image_Signal_l
         {
             Aspect = SignalAspect_l.Magenta;
             Console.WriteLine($"{SignalName} Aspect set to Magenta because PowerOff or Error");
+            UpdateSvg();
+            return;
         }
         else if (PowerOn && !RouteSet)
         {
             Aspect = SignalAspect_l.H;
             Console.WriteLine($"{SignalName} Aspect set to H because ManualStop or Route not set");
             MainLampRed = true;
+            UpdateSvg();
+            return;
         }
         else if (PowerOn && Error)
         {
             Aspect = SignalAspect_l.NH;
             Console.WriteLine($"{SignalName} Aspect set to NH because Error");
             MainLampEmergencyRed = true;
+            UpdateSvg();
+            return;
         }
         else if (canBeeGreen && VelocityLimit == 0)
         {
             Aspect = SignalAspect_l.F1;
             Console.WriteLine($"{SignalName} Aspect set to F1 because can be green and VelocityLimit 0");
             MainLampGreen1 = true;
+            UpdateSvg();
+            return;
         }
         else if (canBeeGreen && VelocityLimit == 40)
         {
@@ -101,6 +110,8 @@ public class image_Signal_l
             Console.WriteLine($"{SignalName} Aspect set to F2 because can be green and VelocityLimit 40");
             MainLampGreen1 = true;
             MainLampOrange2 = true;
+            UpdateSvg();
+            return;
         }
         else if (canBeeGreen && VelocityLimit == 60)
         {
@@ -108,6 +119,8 @@ public class image_Signal_l
             Console.WriteLine($"{SignalName} Aspect set to F3 because can be green and VelocityLimit 60");
             MainLampGreen1 = true;
             MainLampGreen2 = true;
+            UpdateSvg();
+            return;
         }
         else if (canBeeGreen && VelocityLimit == 90)
         {
@@ -116,6 +129,8 @@ public class image_Signal_l
             MainLampGreen1 = true;
             MainLampGreen2 = true;
             MainLampGreen3 = true;
+            UpdateSvg();
+            return;
         }
         else if (canBeeGreen && ShortEntrance)
         {
@@ -123,6 +138,8 @@ public class image_Signal_l
             Console.WriteLine($"{SignalName} Aspect set to F6 because can be green and ShortEntrance");
             MainLampOrange1 = true;
             MainLampOrange2 = true;
+            UpdateSvg();
+            return;
         }
         else if (canBeeGreen && OccupiedEntrance)
         {
@@ -130,6 +147,8 @@ public class image_Signal_l
             Console.WriteLine($"{SignalName} Aspect set to F2_BES because can be green and OccupiedEntrance");
             MainLampGreen1 = true;
             MainLampOrange2 = true;
+            UpdateSvg();
+            return;
         }
         UpdateSvg();
     }
@@ -215,6 +234,7 @@ public class image_Signal_l
         SvgToken = null;
         SvgFile = null;
         SvgPath = null;
+        Svg.Replace(null);
     }
 
     private void ApplySvgOverride(string svgOverride, string token)
@@ -240,6 +260,7 @@ public class image_Signal_l
         SvgToken = token;
         SvgFile = normalized;
         SvgPath = $"/svg/{normalized}";
+        Svg.Replace(normalized);
     }
 
     private string MapAspectToColor()
