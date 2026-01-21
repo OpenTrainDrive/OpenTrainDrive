@@ -39,7 +39,8 @@
     paletteFilter: '',
     dirty: false,
     saveTimer: null,
-    isSaving: false
+    isSaving: false,
+    signalAttention: new Set()
   };
 
   const configFields = [
@@ -176,6 +177,9 @@
       el.style.transform = rotationTransform;
       if (isSignalSymbol(sym)) {
         el.dataset.iltisSignal = 'true';
+        if (state.signalAttention.has(sym.id)) {
+          el.classList.add('otd-signal-attention');
+        }
       }
       if (sym.id === state.selectedId) {
         el.classList.add('is-selected');
@@ -416,6 +420,36 @@
   function isSignalSymbol(sym) {
     const file = (sym?.config?.file || '').toLowerCase();
     return file.includes('.svg') && file.includes('signal');
+  }
+
+  function findSignalSymbol(signalId) {
+    if (!signalId) return null;
+    const byId = state.symbols.find(sym => sym.id === signalId && isSignalSymbol(sym));
+    if (byId) return byId;
+    const target = signalId.toString().trim();
+    if (!target) return null;
+    return state.symbols.find(sym => {
+      if (!isSignalSymbol(sym)) return false;
+      const name = sym.config?.name || '';
+      const shortName = sym.config?.shortName || '';
+      const type = sym.type || '';
+      return name === target || shortName === target || type === target;
+    }) || null;
+  }
+
+  function setSignalAttention(signalId, enabled) {
+    const sym = findSignalSymbol(signalId);
+    if (!sym) return false;
+    if (enabled) {
+      state.signalAttention.add(sym.id);
+    } else {
+      state.signalAttention.delete(sym.id);
+    }
+    const el = canvas.querySelector(`[data-id="${sym.id}"]`);
+    if (el) {
+      el.classList.toggle('otd-signal-attention', !!enabled);
+    }
+    return true;
   }
 
   function toSwitchStraight(file) {
@@ -1266,5 +1300,13 @@
 
   window.setPlanEditMode = function (enabled, options) {
     setEditMode(!!enabled, options);
+  };
+
+  window.setSignalAttention = function (signalId, enabled = true) {
+    return setSignalAttention(signalId, enabled);
+  };
+
+  window.clearSignalAttention = function (signalId) {
+    return setSignalAttention(signalId, false);
   };
 })();

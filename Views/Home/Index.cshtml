@@ -463,7 +463,7 @@
         panel.classList.add('otd-hidden');
     }
 
-    window.addMeldeItem = function (message, section = 'system', colorClass = 'otd-melde-item-gray') {
+    window.addMeldeItem = function (message, section = 'system', colorClass = 'otd-melde-item-gray', options = null) {
         const panel = document.getElementById('otd-melde-panel');
         const body = panel?.querySelector(`.otd-melde-body[data-section="${section}"]`);
         if (!body) {
@@ -472,7 +472,16 @@
         const item = document.createElement('div');
         item.className = `otd-melde-item ${colorClass}`;
         item.textContent = message;
+        if (options?.dataset) {
+            Object.entries(options.dataset).forEach(([key, value]) => {
+                item.dataset[key] = value;
+            });
+        }
+        if (typeof options?.onClick === 'function') {
+            item.addEventListener('click', options.onClick);
+        }
         body.prepend(item);
+        return item;
     };
 
     function openLupenbild() {
@@ -600,6 +609,99 @@
     enablePanelDragging('otd-settings');
     enablePanelDragging('otd-plan-editor');
 
+    const attentionState = {
+        active: new Map(),
+        audioContext: null,
+        oscillator: null,
+        gainNode: null,
+        toneTimer: null
+    };
+
+    function startAttentionTone() {
+        if (attentionState.toneTimer) {
+            return;
+        }
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) {
+            return;
+        }
+        try {
+            attentionState.audioContext = new AudioCtx();
+            attentionState.oscillator = attentionState.audioContext.createOscillator();
+            attentionState.gainNode = attentionState.audioContext.createGain();
+            attentionState.oscillator.type = 'sine';
+            attentionState.oscillator.frequency.value = 880;
+            attentionState.gainNode.gain.value = 0;
+            attentionState.oscillator.connect(attentionState.gainNode);
+            attentionState.gainNode.connect(attentionState.audioContext.destination);
+            attentionState.oscillator.start();
+            attentionState.audioContext.resume();
+
+            let active = false;
+            attentionState.toneTimer = window.setInterval(() => {
+                active = !active;
+                if (!attentionState.gainNode) {
+                    return;
+                }
+                const now = attentionState.audioContext?.currentTime ?? 0;
+                attentionState.gainNode.gain.setTargetAtTime(active ? 0.08 : 0, now, 0.02);
+            }, 500);
+        } catch {
+            stopAttentionTone();
+        }
+    }
+
+    function stopAttentionTone() {
+        if (attentionState.toneTimer) {
+            clearInterval(attentionState.toneTimer);
+            attentionState.toneTimer = null;
+        }
+        if (attentionState.gainNode) {
+            attentionState.gainNode.gain.value = 0;
+        }
+        if (attentionState.oscillator) {
+            try {
+                attentionState.oscillator.stop();
+            } catch { }
+        }
+        attentionState.oscillator = null;
+        attentionState.gainNode = null;
+        if (attentionState.audioContext) {
+            attentionState.audioContext.close();
+        }
+        attentionState.audioContext = null;
+    }
+
+    function syncAttentionTone() {
+        if (attentionState.active.size > 0) {
+            startAttentionTone();
+        } else {
+            stopAttentionTone();
+        }
+    }
+
+    window.raiseBedienaufforderung = function (signalId, message) {
+        const key = (signalId ?? '').toString().trim();
+        if (!key) {
+            return null;
+        }
+        if (attentionState.active.has(key)) {
+            return attentionState.active.get(key);
+        }
+        const text = message?.toString().trim() || `Bedienaufforderung ${key}`;
+        const item = window.addMeldeItem(text, 'bedien', 'otd-melde-item-green', {
+            dataset: { attentionId: key }
+        });
+        if (!item) {
+            return null;
+        }
+        attentionState.active.set(key, item);
+        if (typeof window.setSignalAttention === 'function') {
+            window.setSignalAttention(key, true);
+        }
+        syncAttentionTone();
+        return item;
+    };
    
     document.addEventListener('click', (event) => {
         const item = event.target.closest('.otd-melde-item');
@@ -619,6 +721,15 @@
             'otd-melde-item-gray'
         );
         item.classList.add('otd-melde-item-ack');
+
+        const attentionId = item.dataset.attentionId;
+        if (attentionId) {
+            attentionState.active.delete(attentionId);
+            if (typeof window.clearSignalAttention === 'function') {
+                window.clearSignalAttention(attentionId);
+            }
+            syncAttentionTone();
+        }
     });
 </script>
 

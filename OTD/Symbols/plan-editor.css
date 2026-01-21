@@ -23,6 +23,12 @@
   cursor: pointer;
 }
 
+.otd-plan-symbol.otd-symbol--svg.otd-signal-attention {
+  box-shadow: 0 0 0 2px #2ecc71, 0 0 10px rgba(46, 204, 113, 0.9);
+  border-radius: 999px;
+  z-index: 2;
+}
+
 .otd-plan-symbol.otd-route-pending::after {
   content: '';
   position: absolute;
