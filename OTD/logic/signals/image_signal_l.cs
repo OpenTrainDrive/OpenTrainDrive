@@ -23,6 +23,11 @@ public class image_Signal_l
     public bool OccupiedEntrance { get; set; }
     public bool ShortEntrance { get; set; }
     public int VelocityLimit { get; set; } = 0;
+    public string SvgDirectory { get; set; } = "SVG";
+    public string? ColorOverride { get; set; }
+    public string? SvgToken { get; private set; }
+    public string? SvgFile { get; private set; }
+    public string? SvgPath { get; private set; }
 
 
     public SignalAspect_l Aspect { get; private set; } = SignalAspect_l.Magenta;
@@ -46,70 +51,78 @@ public class image_Signal_l
         if (!PowerOn || Error)
         {
             Aspect = SignalAspect_l.Magenta;
-            return;
         }
-
-        if (PowerOn && (ManualStop || !RouteSet))
+        else if (PowerOn && (ManualStop || !RouteSet))
         {
             Aspect = SignalAspect_l.H;
             LampRed = true;
-            return;
         }
-
-        if (PowerOn && Error)
+        else if (PowerOn && Error)
         {
             Aspect = SignalAspect_l.NH;
             LampEmergencyRed = true;
-            return;
         }
-
-        if (PowerOn && RouteSet && VelocityLimit == 0)
+        else if (PowerOn && RouteSet && VelocityLimit == 0)
         {
             Aspect = SignalAspect_l.F1;
             LampGreen1 = true;
-            return;
         }
-        if (PowerOn && RouteSet && VelocityLimit == 40)
+        else if (PowerOn && RouteSet && VelocityLimit == 40)
         {
             Aspect = SignalAspect_l.F2;
             LampGreen1 = true;
             LampOrange2 = true;
-            return;
         }
-        if (PowerOn && RouteSet && VelocityLimit == 60)
+        else if (PowerOn && RouteSet && VelocityLimit == 60)
         {
             Aspect = SignalAspect_l.F3;
             LampGreen1 = true;
             LampGreen2 = true;
-            return;
         }
-        if (PowerOn && RouteSet && VelocityLimit == 90)
+        else if (PowerOn && RouteSet && VelocityLimit == 90)
         {
             Aspect = SignalAspect_l.F5;
             LampGreen1 = true;
             LampGreen2 = true;
             LampGreen3 = true;
-            return;
         }
-        if (PowerOn && RouteSet && ShortEntrance)
+        else if (PowerOn && RouteSet && ShortEntrance)
         {
             Aspect = SignalAspect_l.F6;
             LampOrange1 = true;
             LampOrange2 = true;
-            return;
         }
-        if (PowerOn && RouteSet && OccupiedEntrance)
+        else if (PowerOn && RouteSet && OccupiedEntrance)
         {
             Aspect = SignalAspect_l.F2_BES;
             LampGreen1 = true;
             LampOrange2 = true;
-            return;
         }
-        else
+        UpdateSvg();
+    }
+
+    public void UpdateSvg()
+    {
+        var color = ColorOverride ?? MapAspectToColor();
+        SvgToken = $"SVG.signal.{color.ToLowerInvariant()}";
+        SvgFile = SvgSymbolResolver.ResolveSvgFile("Signal", color, SvgDirectory);
+        SvgPath = SvgSymbolResolver.ResolveSvgPath("Signal", color, SvgDirectory);
+    }
+
+    private string MapAspectToColor()
+    {
+        return Aspect switch
         {
-            
-        }
-    
+            SignalAspect_l.Magenta => "Magenta",
+            SignalAspect_l.H => "Red",
+            SignalAspect_l.NH => "Red",
+            SignalAspect_l.F1 => "Green",
+            SignalAspect_l.F2 => "Green",
+            SignalAspect_l.F2_BES => "Green",
+            SignalAspect_l.F3 => "Green",
+            SignalAspect_l.F5 => "Green",
+            SignalAspect_l.F6 => "Green",
+            _ => "Magenta"
+        };
     }
 }
-

@@ -48,6 +48,8 @@
     { key: 'type', label: 'Typ', type: 'text' },
     { key: 'classes', label: 'CSS Klassen', type: 'text' },
     { key: 'file', label: 'Datei', type: 'text' },
+    { key: 'elementName', label: 'Elementname', type: 'text' },
+    { key: 'elementColor', label: 'Farbe', type: 'text' },
     { key: 'trainNumber', label: 'Zugnummer', type: 'text' },
     { key: 'layer', label: 'Ebene', type: 'number' },
     { key: 'rotation', label: 'Rotation', type: 'select', options: ['0', '90', '180', '270'] },
@@ -138,9 +140,12 @@
       const rotationDeg = Number.isFinite(rotation) ? rotation : 0;
       el.style.transformOrigin = 'center';
       const rotationTransform = `translate(-50%, -50%) rotate(${rotationDeg}deg)`;
-      if (sym.config?.file) {
+      if (sym.config?.file || sym.config?.elementName || sym.config?.elementColor) {
         el.classList.add('otd-symbol--svg');
-        const baseFile = normalizeSvgFile(sym.config.file);
+        const overrideFile = (sym.config?.elementName || sym.config?.elementColor)
+          ? resolveSvgByNameColor(sym.config?.elementName || '', sym.config?.elementColor || '')
+          : '';
+        const baseFile = normalizeSvgFile(overrideFile || sym.config?.file || '');
         let renderFile = baseFile;
         if (sym.config?.testTurnout === 'diverge') {
           renderFile = toSwitchTurnoutGreen(baseFile);
@@ -244,6 +249,21 @@
           render();
         } else {
           sym.config[field.key] = inputEl.value;
+          if (field.key === 'elementName' || field.key === 'elementColor') {
+            if (field.key === 'elementName') {
+              const parsed = parseElementToken(inputEl.value);
+              if (parsed) {
+                sym.config.elementName = parsed.name;
+                sym.config.elementColor = parsed.color;
+                inputEl.value = inputEl.value.trim();
+              }
+            }
+            const resolved = resolveSvgByNameColor(sym.config.elementName || '', sym.config.elementColor || '');
+            if (resolved) {
+              sym.config.file = resolved;
+              render();
+            }
+          }
         }
         state.dirty = true;
         scheduleAutoSave();
@@ -432,6 +452,83 @@
       return file.replace('Iltis_Zugnummernanzeiger.svg', 'Iltis_Zugnummernanzeiger_White.svg');
     }
     return file;
+  }
+
+  function normalizeElementName(name) {
+    if (!name) return '';
+    let base = name.toString().trim();
+    if (!base) return '';
+    if (base.includes('.')) {
+      const parsed = parseElementToken(base);
+      if (parsed) {
+        base = parsed.name;
+      }
+    }
+    base = base.replace(/\.svg$/i, '');
+    base = base.replace(/\s+/g, '_');
+    base = base.replace(/_(Red|Green|White|Magenta|Yellow|On|Off)$/i, '');
+    base = base.replace(/_(on|off)$/i, '');
+    base = base.replace(/[\s_-]+$/g, '');
+    return base;
+  }
+
+  function normalizeElementColor(color) {
+    if (!color) return '';
+    const text = color.toString().trim().toLowerCase();
+    if (!text) return '';
+    const map = {
+      red: 'Red',
+      rot: 'Red',
+      green: 'Green',
+      gruen: 'Green',
+      weiss: 'White',
+      white: 'White',
+      magenta: 'Magenta',
+      yellow: 'Yellow',
+      gelb: 'Yellow',
+      on: 'On',
+      off: 'Off'
+    };
+    return map[text] || (text.charAt(0).toUpperCase() + text.slice(1));
+  }
+
+  function parseElementToken(value) {
+    if (!value) return null;
+    const raw = value.toString().trim();
+    if (!raw.includes('.')) return null;
+    const parts = raw.split('.').map(p => p.trim()).filter(Boolean);
+    if (parts.length < 3) return null;
+    if (parts[0].toLowerCase() !== 'svg') return null;
+    const color = parts.pop();
+    const name = parts.slice(1).join('_');
+    if (!name || !color) return null;
+    return { name, color };
+  }
+
+  function resolveSvgByNameColor(name, color) {
+    let base = normalizeElementName(name);
+    let colorToken = normalizeElementColor(color);
+    if ((!base || !colorToken) && name) {
+      const parsed = parseElementToken(name);
+      if (parsed) {
+        base = normalizeElementName(parsed.name);
+        colorToken = normalizeElementColor(parsed.color);
+      }
+    }
+    if (!base || !colorToken) return '';
+
+    const candidates = [
+      `${base}_${colorToken}.svg`,
+      `Iltis_${base}_${colorToken}.svg`
+    ];
+
+    for (const candidate of candidates) {
+      if (state.paletteItems?.some(item => (item.file || '').endsWith(`/${candidate}`))) {
+        return `/svg/${candidate}`;
+      }
+    }
+
+    return `/svg/${candidates[0]}`;
   }
 
   function toSwitchTurnout(file) {
