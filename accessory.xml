@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- Definition of Switching Devices like Turnouts and Signals -->
-<switchingdevices>
-  <switchingdevice uid="3f8a1b2c-4d5e-4f7a-8b9c-0d1e2f3a4b5c" name="W1" type="turnout" index="1">
+<accessories>
+  <accessory uid="3f8a1b2c-4d5e-4f7a-8b9c-0d1e2f3a4b5c" name="W1" type="turnout" index="1">
     <decoder>
       <commandstation>1</commandstation>
       <protocol>DCC</protocol>
@@ -14,8 +14,8 @@
         <decoder address="10" output="1" />
       </state>
     </states>
-  </switchingdevice>
-  <switchingdevice uid="3f8a1b2c-4d5e-4f7a-8b9c-0d1e2f3a4b5c" name="W2" type="double-slip-turnout" index="2">
+  </accessory>
+  <accessory uid="3f8a1b2c-4d5e-4f7a-8b9c-0d1e2f3a4b5c" name="W2" type="double-slip-turnout" index="2">
     <decoder>
       <commandstation>1</commandstation>
       <protocol>DCC</protocol>
@@ -38,8 +38,8 @@
         <decoder address="12" output="0" />
       </state>
     </states>
-  </switchingdevice>
-  <switchingdevice uid="3f8a1b2c-4d5e-4f7a-8b9c-0d1e2f3a4b5c" name="W3" type="three-way-turnout" index="3">
+  </accessory>
+  <accessory uid="3f8a1b2c-4d5e-4f7a-8b9c-0d1e2f3a4b5c" name="W3" type="three-way-turnout" index="3">
     <decoder>
       <commandstation>1</commandstation>
       <protocol>DCC</protocol>
@@ -58,8 +58,8 @@
         <decoder address="14" output="1" />
       </state>
     </states>
-  </switchingdevice>
-  <switchingdevice uid="a7b8c9d0-e1f2-4a3b-5c6d-7e8f9a0b1c2d" id="S1" type="signal" index="4">
+  </accessory>
+  <accessory uid="a7b8c9d0-e1f2-4a3b-5c6d-7e8f9a0b1c2d" id="S1" type="signal" index="4">
     <model>
       <signalsystem>SBB-L</signalsystem>
       <notes>Hauptsignal SBB Typ L</notes>
@@ -91,5 +91,5 @@
         <decoder address="54" output="1" />
       </state>
     </states>
-  </switchingdevice>
-</switchingdevices>
+  </accessory>
+</accessories>

@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OpenTrainDrive.Engines
+namespace OpenTrainDrive.OTD.Controllers
 {
     /// <summary>
     /// Configuration values for acceleration behavior.
@@ -32,7 +32,7 @@ namespace OpenTrainDrive.Engines
     /// <summary>
     /// Represents a model railway locomotive and provides control methods
     /// </summary>
-    public class LocomotiveController
+    public class LocoController
     {
         private string _locoXmlPath;
         private int _address;
@@ -51,12 +51,12 @@ namespace OpenTrainDrive.Engines
         public int DccAddress { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of LocomotiveController with a specific locomotive address
+        /// Initializes a new instance of LocoController with a specific locomotive address
         /// </summary>
         /// <param name="locoXmlPath">Path to the loco.xml file</param>
         /// <param name="address">DCC address of the locomotive to control</param>
         /// <exception cref="ArgumentException">Thrown when locomotive with specified address is not found</exception>
-        public LocomotiveController(string locoXmlPath, int address)
+        public LocoController(string locoXmlPath, int address)
         {
             if (!System.IO.File.Exists(locoXmlPath))
                 throw new FileNotFoundException($"Locomotive configuration file not found: {locoXmlPath}");

@@ -12,7 +12,7 @@ namespace OpenTrainDrive.OTD.Controllers
 	/// <summary>
 	/// Controller for switching devices (turnouts and signals).
 	/// </summary>
-	public static class SwitchingDevicesController
+	public static class AccessoryController
 	{
 		// Reference to switchingdevices.xml in application path
 		private static string _xmlPath;
@@ -104,6 +104,7 @@ namespace OpenTrainDrive.OTD.Controllers
 		/// </summary>
 		   public static bool SetState(string uid, string state)
 		   {
+			Console.WriteLine($"-- SetState to {uid}: {state} --");
 			   var device = _devices.FirstOrDefault(d => d.UID == uid);
 			   if (device == null) return false;
 			   var pos = device.Positions.FirstOrDefault(p => p.Name == state);
